@@ -1,0 +1,17 @@
+{
+  "name": "nex_viz",
+  "version": "1.0.0",
+  "description": "prototype of a UI for NEX data visualization",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Iacopo Neri - NOUMENA",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "fast-csv": "^4.3.6",
+    "javascript-color-gradient": "^2.4.4",
+    "three": "^0.142.0"
+  }
+}

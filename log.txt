@@ -1,0 +1,10 @@
+export only Geom from utils --> never bring scene in utils
+
+check window resize (canvas = window?)
+
+check dygraph ---- 2 times plotting?!
+dygraph drawcallback ---- check the ready if its needed -------- this.ready(function () { .... }
+
+refine the initial camera setting 
+
+double check why sliders need !import in .css

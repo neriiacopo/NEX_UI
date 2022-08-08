@@ -1,0 +1,17 @@
+<div class="ui segments horizontal">
+                <div class="ui segment ">
+                  <p>Female</p>
+                </div>
+                <div class="ui segment ">
+                  <i class="stop icon text-right"></i>
+                </div>
+              </div>
+
+
+
+    function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
