@@ -60,15 +60,17 @@
 
   <body id="body">
     <div id="ui_wrapper">
-      <!-- Nav Bar-->
-      <div class="ui stackable container menu header fluid" >
-        <div class="item" onclick="showTab('')">
-          <img src="./public/NEX_logo.png" width="100" />
+      <div class="menu_wrapper">
+        <!-- Nav Bar-->
+        <div class="ui stackable container menu header" >
+          <div class="item" onclick="showTab('')">
+            <img src="./public/NEX_logo.png" width="100" />
+          </div>
+          <a class="item right" onclick="showTab('layers')">Layers</a>
+          <a class="item" onclick="showTab('focus')">Focus</a>
+          <a class="item" onclick="showTab('insights')">Insights</a>
+          <a class="item" onclick="showTab('gathering')">Gathering</a>
         </div>
-        <a class="item right" onclick="showTab('layers')">Layers</a>
-        <a class="item" onclick="showTab('focus')">Focus</a>
-        <a class="item" onclick="showTab('insights')">Insights</a>
-        <a class="item" onclick="showTab('gathering')">Gathering</a>
       </div>
 
       <!-- Gathering section-->
