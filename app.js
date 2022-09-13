@@ -19,11 +19,10 @@ const dummy = new THREE.Object3D(); // Dummmy geom for instance mesh
 const keys = ["gender", "age", "group"]; // Data layers
 const subdiv = [2, 4, 6]; // Grid subdivision factor per data layer
 
-const ptCloudPath = "models/csv/ptcloud.csv";
-const gridPath = "models/csv/grid.csv";
-const valsPath = "./models/json/grid_values.json";
-const meshPath = "./models/json/grid_mesh.json";
-const resPath = "./models/csv/grid_res.csv";
+const ptCloudPath = "models/csv/ptcloud_01.csv";
+const gridPath = "models/csv/grid_01.csv";
+const valsPath = "./models/json/grid_values_01.json";
+const resPath = "./models/csv/grid_res_01.csv";
 const colorsPath = "./styles/colors_viz.json";
 
 const pt_arr = await fetchText(ptCloudPath); // PointCloud
@@ -192,6 +191,13 @@ function render() {
       counts[num] = counts[num] + 1;
     }
     let cMax = Math.max(...Object.values(counts)); // Extract max occurencies for color gradient
+
+    // Cap values to avoid [TEMPORARY FIX]
+    let capMax = 6;
+    if (cMax > capMax) {
+      cMax = capMax;
+    }
+
     let cMin = Math.min(...Object.values(counts)); // Extract min occ for remap
     let baseRange = [cMin, cMax];
     let skewRange = [Math.pow(cMin, fac_Sk), Math.pow(cMax, fac_Sk)];
@@ -358,6 +364,81 @@ document
   .querySelectorAll(".db_filter")
   .forEach((input) => input.addEventListener("click", drawChart));
 
+// ---------------------------- Insights charts
+
+function drawPies() {
+  let detections = grid_vals;
+  const ids = ["pie_Gen", "pie_Age", "pie_Grp"];
+  const labels = ["gender", "age", "group"];
+  const legend = [
+    ["Male", "Female"],
+    ["Child", "Young", "Adult", "Elderly"],
+    [
+      "Caucasian",
+      "Indian",
+      "MIddle Eastern",
+      "Afro American",
+      "Asian",
+      "Other",
+    ],
+  ];
+
+  for (let ind = 0; ind < ids.length; ind++) {
+    const elem = document.getElementById(ids[ind]);
+    const key = labels[ind];
+    let f = keys.indexOf(key);
+    let colors_sel = colors[key];
+    let data = [];
+
+    Chart.defaults.font = {
+      family: "'Poppins', sans-serif",
+    };
+
+    // Loop for values of filters
+    for (let i = 0; i < subdiv[f]; i++) {
+      let vals_filt = [];
+      // Prepare filtered values
+      for (const detection of detections) {
+        if (detection[key] == i) {
+          vals_filt.push(detection.id);
+        }
+      }
+      data.push(vals_filt.length);
+    }
+
+    const chart = new Chart(elem, {
+      type: "doughnut",
+
+      options: {
+        cutout: "90%",
+        // animation: {
+        //   animateRotate: false,
+        //   animateScale: false,
+        // },
+        animation: false,
+        layout: {
+          padding: 30,
+        },
+
+        // plugins: {
+        //   tooltip: "enabled",
+        // },
+      },
+      data: {
+        datasets: [
+          {
+            data: data,
+            backgroundColor: colors_sel,
+            borderWidth: 0,
+          },
+        ],
+      },
+    });
+  }
+}
+
+// ---------------------------- Slider UI
+
 let sldHeight = document.getElementById("sldCon_Height");
 noUiSlider.create(sldHeight, {
   start: 0.5,
@@ -368,6 +449,7 @@ noUiSlider.create(sldHeight, {
     max: 0.5,
   },
 });
+
 let sldWidth = document.getElementById("sldCon_Width");
 noUiSlider.create(sldWidth, {
   start: 1.5,
@@ -432,4 +514,5 @@ function resetSlider() {
 init();
 makeBaseGrid();
 drawChart();
+drawPies();
 animate();
