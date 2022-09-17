@@ -131,7 +131,7 @@ body {
     backdrop-filter: blur(0px);
   }
   to {
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(50px);
   }
 }
 
@@ -174,9 +174,9 @@ path {
 
 .ui_slider {
   position: relative;
-  top: 8px;
   margin: 0 10px;
   height: 8px;
+  vertical-align: middle;
 }
 
 .noUi-handle {
@@ -222,4 +222,18 @@ path {
 .bw {
   -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
   filter: grayscale(100%);
+}
+
+.carousel_cell {
+  margin: 30px;
+}
+
+.rounded {
+  border-radius: 30px;
+}
+
+.chart_wrap {
+  position: relative;
+  width: 30vw;
+  height: 30vh;
 }

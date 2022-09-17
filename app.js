@@ -9,7 +9,9 @@ import {
   fetchJSON,
   fetchRGB,
   geomPTCloud,
+  drawPies,
 } from "utils";
+import { Clock } from "three";
 
 let scene, renderer, camera, controls, ambientlight;
 let bars, aspect;
@@ -152,7 +154,7 @@ function render() {
   let fac_W = sldWidth.noUiSlider.get(); // Width exaggerating factor
   let filt_clip = sldClip.noUiSlider.get(); // Clip Min Max
   let fac_Sk = sldSkew.noUiSlider.get(); // Skewing factor
-  let key_foc = $(".selection.dropdown").dropdown("get value"); // Filter focus key
+  let key_foc = $("#drop_Foc").dropdown("get value"); // Filter focus key
   let filt_foc = sldFoc.noUiSlider.get(); // Filter focus distance
 
   const v = 0.1 / 2;
@@ -360,82 +362,26 @@ async function drawChart() {
     });
   }, 0);
 }
+
 document
   .querySelectorAll(".db_filter")
   .forEach((input) => input.addEventListener("click", drawChart));
 
 // ---------------------------- Insights charts
 
-function drawPies() {
-  let detections = grid_vals;
-  const ids = ["pie_Gen", "pie_Age", "pie_Grp"];
-  const labels = ["gender", "age", "group"];
-  const legend = [
-    ["Male", "Female"],
-    ["Child", "Young", "Adult", "Elderly"],
-    [
-      "Caucasian",
-      "Indian",
-      "MIddle Eastern",
-      "Afro American",
-      "Asian",
-      "Other",
-    ],
-  ];
+await drawPies(grid_vals, keys, colors, subdiv);
 
-  for (let ind = 0; ind < ids.length; ind++) {
-    const elem = document.getElementById(ids[ind]);
-    const key = labels[ind];
-    let f = keys.indexOf(key);
-    let colors_sel = colors[key];
-    let data = [];
+let d = $("#drop_Filt").dropdown({
+  action: "combo",
+  clearable: true,
+  onChange: function (value, text, $selectedItem) {
+    drawPies(grid_vals, keys, colors, subdiv);
+  },
+});
 
-    Chart.defaults.font = {
-      family: "'Poppins', sans-serif",
-    };
-
-    // Loop for values of filters
-    for (let i = 0; i < subdiv[f]; i++) {
-      let vals_filt = [];
-      // Prepare filtered values
-      for (const detection of detections) {
-        if (detection[key] == i) {
-          vals_filt.push(detection.id);
-        }
-      }
-      data.push(vals_filt.length);
-    }
-
-    const chart = new Chart(elem, {
-      type: "doughnut",
-
-      options: {
-        cutout: "90%",
-        // animation: {
-        //   animateRotate: false,
-        //   animateScale: false,
-        // },
-        animation: false,
-        layout: {
-          padding: 30,
-        },
-
-        // plugins: {
-        //   tooltip: "enabled",
-        // },
-      },
-      data: {
-        datasets: [
-          {
-            data: data,
-            backgroundColor: colors_sel,
-            borderWidth: 0,
-          },
-        ],
-      },
-    });
-  }
-}
+document
+  .querySelectorAll(".db_filter")
+  .forEach((input) => input.addEventListener("click", drawChart));
 
 // ---------------------------- Slider UI
 
