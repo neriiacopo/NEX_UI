@@ -131,7 +131,7 @@ body {
     backdrop-filter: blur(0px);
   }
   to {
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(20px);
   }
 }
 
@@ -146,6 +146,10 @@ body {
 
 .dygraph-label {
   color: white;
+}
+
+.dygraph-ylabel {
+  margin-top: 10px;
 }
 
 .dygraph-axis-label {
@@ -168,8 +172,19 @@ path {
 .ui_camera {
   position: absolute;
   top: 0px;
+  right: 60px;
+  margin: 30px;
+}
+
+.ui_calendar {
+  position: absolute;
+  top: 0px;
   right: 0px;
   margin: 30px;
+}
+
+.calendar.popup::before {
+  display: none;
 }
 
 .ui_slider {
@@ -226,6 +241,8 @@ path {
 
 .carousel_cell {
   margin: 30px;
+  background-color: white;
+  height: 80vh;
 }
 
 .rounded {
