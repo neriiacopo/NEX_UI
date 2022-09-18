@@ -57,37 +57,6 @@ var dy_options = {
   rangeSelectorPlotFillGradientColor: "rgb(128, 128, 128)",
   axisLineColor: "rgb(128, 128, 128)",
   animatedZooms: false,
-  axis: {
-    // x: {
-    //   axisLabelFormatter: function (d, gran, opts) {
-    //     function roundToNearest15(date = new Date()) {
-    //       const minutes = 15;
-    //       const ms = 1000 * 60 * minutes;
-    //       return new Date(
-    //         Math.round(date.toLocaleTimeString("default").getTime() / ms) * ms
-    //       );
-    //     }
-    //     return Dygraph.dateAxisLabelFormatter(
-    //       roundToNearest15(new Date(d * 1000)),
-    //       gran,
-    //       opts
-    //     );
-    //   },
-    // },
-    // x: {
-    //   axisLabelWidth: 70,
-    //   axisLabelFormatter: function (d, gran) {
-    //     let date = new Date(d);
-    //     return (
-    //       zeropad(date.getHours()) +
-    //       ":" +
-    //       zeropad(date.getMinutes()) +
-    //       ":" +
-    //       zeropad(date.getSeconds())
-    //     );
-    //   },
-    // },
-  },
   drawCallback: function () {
     // this.ready(function () {
     let chart_range = this.xAxisRange().concat(); // Get boundaries of range selector
@@ -186,10 +155,10 @@ function makeBaseGrid() {
 }
 
 function render() {
-  let t = document
-    .querySelector("#calendar")
-    .querySelector("calendar.popup.ui.active");
-  console.log(t);
+  // let t = document
+  //   .querySelector("#calendar")
+  //   .querySelector("calendar.popup.ui.active");
+  // console.log(t);
   filter = document.querySelector(".db_filter.active").id;
 
   let detections = grid_vals;
