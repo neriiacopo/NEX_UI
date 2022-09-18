@@ -24,6 +24,14 @@
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       crossorigin="anonymous"
     ></script>
+
+    <link
+      href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
     <!-- CHART.JS-->
@@ -46,7 +54,7 @@
           "OrbitControls": "./modules/three/OrbitControls.js",
           "jsGradient": "./modules/js-gradient/index.js",
           "utils": "./modules/utils.js",
-          "chart": "./modules/chart.js"
+          "ch_utils": "./modules/ch_utils.js"
         }
       }
     </script>
@@ -411,6 +419,15 @@
       </button>
     </div>
 
+    <!-- Cameras Toggle -->
+    <div class="ui_calendar z2">
+      <div class="ui calendar" id="calendar">
+        <button class="ui big circular icon button active" id="tgl_camera">
+          <i class="calendar alternate outline icon"></i>
+        </button>
+      </div>
+    </div>
+
     <!-- Colophon-->
     <div class="logo">
       <a href="https://noumena.io/en/" target="_blank">
@@ -422,14 +439,13 @@
     <script>
       $(".ui.accordion").accordion();
       $(".ui.dropdown").dropdown();
-      $(".ui.clearable.dropdown").dropdown({
-        clearable: true,
-      });
 
       $("#tgl_camera").click(function () {
         $(this).toggleClass("active");
         $(this).children(".icon").toggleClass("cube stop");
       });
+
+      $("#calendar").calendar({ type: "date" });
     </script>
 
     <script>

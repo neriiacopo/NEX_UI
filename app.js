@@ -9,8 +9,9 @@ import {
   fetchJSON,
   fetchRGB,
   geomPTCloud,
-  drawPies,
 } from "utils";
+import { drawPies } from "ch_utils";
+
 import { Clock } from "three";
 
 let scene, renderer, camera, controls, ambientlight;
@@ -23,13 +24,14 @@ const subdiv = [2, 4, 6]; // Grid subdivision factor per data layer
 
 const ptCloudPath = "models/csv/ptcloud_01.csv";
 const gridPath = "models/csv/grid_01.csv";
-const valsPath = "./models/json/grid_values_01.json";
+const valsPath = "./models/json/grid_values_08.json";
 const resPath = "./models/csv/grid_res_01.csv";
 const colorsPath = "./styles/colors_viz.json";
 
 const pt_arr = await fetchText(ptCloudPath); // PointCloud
 const grid_arr = await fetchText(gridPath); // Array with locations of grid points
 const grid_res = await fetchText(resPath);
+
 var grid_vals = await fetchJSON(valsPath); // Array with the detections
 grid_vals = grid_vals.data;
 const colors = await fetchJSON(colorsPath); // Color gradients
@@ -38,7 +40,7 @@ fetchRGB(colors);
 const amount = grid_arr.length * 6 + 1; // Max bars instances as the max grid cells
 var ptCloud = await geomPTCloud(pt_arr, new THREE.Color("rgb(100,100,100))"));
 
-var ch_options = {
+var dy_options = {
   title: "",
   legend: "never",
   ylabel: "Flow",
@@ -46,7 +48,7 @@ var ch_options = {
   strokeWidth: 3,
   fillAlpha: 0.2,
   fillGraph: true,
-  rollPeriod: 5,
+  rollPeriod: 1,
   showLabelsOnHighlight: false,
   rangeSelectorAlpha: 0.1,
   showRangeSelector: true,
@@ -55,6 +57,37 @@ var ch_options = {
   rangeSelectorPlotFillGradientColor: "rgb(128, 128, 128)",
   axisLineColor: "rgb(128, 128, 128)",
   animatedZooms: false,
+  axis: {
+    // x: {
+    //   axisLabelFormatter: function (d, gran, opts) {
+    //     function roundToNearest15(date = new Date()) {
+    //       const minutes = 15;
+    //       const ms = 1000 * 60 * minutes;
+    //       return new Date(
+    //         Math.round(date.toLocaleTimeString("default").getTime() / ms) * ms
+    //       );
+    //     }
+    //     return Dygraph.dateAxisLabelFormatter(
+    //       roundToNearest15(new Date(d * 1000)),
+    //       gran,
+    //       opts
+    //     );
+    //   },
+    // },
+    // x: {
+    //   axisLabelWidth: 70,
+    //   axisLabelFormatter: function (d, gran) {
+    //     let date = new Date(d);
+    //     return (
+    //       zeropad(date.getHours()) +
+    //       ":" +
+    //       zeropad(date.getMinutes()) +
+    //       ":" +
+    //       zeropad(date.getSeconds())
+    //     );
+    //   },
+    // },
+  },
   drawCallback: function () {
     // this.ready(function () {
     let chart_range = this.xAxisRange().concat(); // Get boundaries of range selector
@@ -63,7 +96,7 @@ var ch_options = {
     // Check if indexes are within range selector
     for (let id = 0; id < grid_vals.length; id++) {
       let dt = grid_vals[id].timestamp;
-      if (chart_range[0] <= dt && dt <= chart_range[1]) {
+      if (chart_range[0] / 1000 <= dt && dt <= chart_range[1] / 1000) {
         id_arr.push(id);
       }
 
@@ -73,7 +106,6 @@ var ch_options = {
         time_range = [id_arr[0], id_arr.slice(-1)[0]]; // Store values in time_range
       }
     }
-    // });
   },
 };
 
@@ -117,6 +149,15 @@ function init() {
 
   // Reset time range threshold values
   time_range = [0, grid_vals.length];
+
+  // Add Arrow entrance
+  const dir = new THREE.Vector3(-1, 0, 0);
+  const origin = new THREE.Vector3(28, 1, 4.172431);
+  const length = 0.25;
+  const hex = "#808080";
+
+  const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 0.5, 1);
+  scene.add(arrowHelper);
 }
 
 function makeBaseGrid() {
@@ -145,6 +186,10 @@ function makeBaseGrid() {
 }
 
 function render() {
+  let t = document
+    .querySelector("#calendar")
+    .querySelector("calendar.popup.ui.active");
+  console.log(t);
   filter = document.querySelector(".db_filter.active").id;
 
   let detections = grid_vals;
@@ -195,7 +240,7 @@ function render() {
     let cMax = Math.max(...Object.values(counts)); // Extract max occurencies for color gradient
 
     // Cap values to avoid [TEMPORARY FIX]
-    let capMax = 6;
+    let capMax = 20;
     if (cMax > capMax) {
       cMax = capMax;
     }
@@ -322,9 +367,25 @@ async function drawChart() {
     let f = keys.indexOf(filter);
     let key = filter;
     let colors_sel = colors[key]; // Prepare Color gradients
-    // Options for chart
-    let ch_lim = grid_vals.slice(-1)[0].timestamp; // Upper X limit of chart (timestamp of last detection)
-    let db = [range(0, ch_lim - 1)]; // Prepare db with indexes to store values
+
+    function roundToNearestSecs(date = new Date(), step) {
+      const ms = 1000 * step;
+      return new Date(Math.round(date.getTime() / ms) * ms);
+    }
+
+    let timeStamp = []; // Prepare db with indexes to store values
+    for (const detection of grid_vals) {
+      timeStamp.push(detection.timestamp);
+    }
+    let timeStamp_unique = Array.from(new Set(timeStamp));
+    let ch_lim = timeStamp_unique.length; // Upper X limit of chart (timestamp of last detection)
+    let db = []; // Prepare db for chart with timestamp column
+    for (let i = 0; i < timeStamp_unique.length; i++) {
+      let time = roundToNearestSecs(new Date(timeStamp[i] * 1000), 60);
+      // let time = timeStamp[i];
+      // .toLocaleTimeString("default");
+      db.push([time]);
+    }
 
     // Loop for values of filters
     for (let i = 0; i < subdiv[f]; i++) {
@@ -339,14 +400,18 @@ async function drawChart() {
         }
       }
 
-      // Update Chart
+      // Calculate counts per timestamp
       let offset = 0.1 * i;
       let ch_counts = [...Array(ch_lim)].map((x) => offset);
       for (const num of timeStamp_filt) {
-        ch_counts[num] = ch_counts[num] + 1; // Count occurrencies per timestamp
+        let id = timeStamp_unique.indexOf(num);
+        ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
       }
 
-      db.push([...Object.values(ch_counts)].concat()); // Store values for chart
+      for (let i = 0; i < timeStamp_unique.length; i++) {
+        let item = db[i];
+        db[i] = item.concat(ch_counts[i]);
+      }
 
       if (i == 0) {
         try {
@@ -355,10 +420,9 @@ async function drawChart() {
       }
     }
 
-    const t_db = db[0].map((_, colIndex) => db.map((row) => row[colIndex])); // Transpose arrays for viz
-    await new Dygraph(chart, t_db, ch_options).updateOptions({
+    await new Dygraph(chart, db, dy_options).updateOptions({
       colors: colors_sel,
-      labels: ["id", "d1", "d2", "d3", "d4", "d5", "d6"],
+      labels: ["Date", "d1", "d2", "d3", "d4", "d5", "d6"],
     });
   }, 0);
 }
