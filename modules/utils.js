@@ -309,3 +309,30 @@ export async function drawChart(chart, dy_options, keys) {
     });
   }, 0);
 }
+
+export function makeBaseGrid(scene, grid_res) {
+  // Draw base grid mesh
+  const dim = 0.25;
+  const geometry = new THREE.BoxGeometry(dim, 0, dim);
+  const edges = new THREE.EdgesGeometry(geometry);
+
+  const lines = new THREE.Group();
+  for (let x = 0; x < grid_res[0].X; x++) {
+    for (let z = 0; z < grid_res[0].Y; z++) {
+      const line = new THREE.LineSegments(
+        edges,
+        new THREE.LineBasicMaterial({
+          color: new THREE.Color("rgb(50,50,50)"),
+          linewidth: 0.1,
+        })
+      );
+      // line.position.set(dim, 0, dim); // Re-center on the corner
+      line.position.set(z * dim, 0, x * dim);
+      line.translateX(+dim / 2).translateZ(+dim / 2);
+      lines.add(line);
+    }
+  }
+  scene.add(lines);
+}
+
+export function makeProdBox(scene, prod_arr) {}

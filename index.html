@@ -15,6 +15,7 @@
     </style>
 
     <!-- SEMANTIC UI -->
+    <!-- Check the versions: currently importing v2.1 & v2.4, probably related to Calendar -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
@@ -35,7 +36,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
     <!-- CHART.JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="./modules/chartjs/chart.min.js"></script>
 
     <!-- DYGRAPH-->
     <script src="./modules/dygraph/dygraph.js"></script>
@@ -50,11 +51,12 @@
       {
         "imports": {
           "three": "./modules/three/three.module.js",
-          "tween": "./modules/three/tween.module.js",
+          "tween": "./modules/three/Tween.js",
           "OrbitControls": "./modules/three/OrbitControls.js",
           "jsGradient": "./modules/js-gradient/index.js",
           "utils": "./modules/utils.js",
-          "ch_utils": "./modules/ch_utils.js"
+          "ch_utils": "./modules/ch_utils.js",
+          "dy_utils": "./modules/dy_utils.js"
         }
       }
     </script>
@@ -68,19 +70,18 @@
       <div class="menu_wrapper">
         <!-- Nav Bar-->
         <div class="ui stackable container menu header">
-          <div class="item" onclick="showTab('')">
+          <div class="item left" onclick="showTab('')">
             <img src="./public/NEX_logo.png" width="100" />
           </div>
-          <a class="item right" onclick="showTab('layers')">Layers</a>
-          <a class="item" onclick="showTab('focus')">Focus</a>
-          <a class="item" onclick="showTab('insights')">Insights</a>
-          <a class="item" onclick="showTab('gathering')">Gathering</a>
+          <a class="item" onclick="showTab('layers')">Layers</a>
+          <a class="item" onclick="showTab('space')">Space</a>
+          <a class="item" onclick="showTab('insights')">Data</a>
+          <a class="item" onclick="showTab('gathering')">Info</a>
         </div>
       </div>
 
       <!-- Gathering section-->
       <div id="gathering" class="tab hidden">
-        <div class="full_page blur_bk_more z1"></div>
         <div class="ui three column grid">
           <div class="column">
             <div class="ui fluid card">
@@ -141,7 +142,7 @@
 
       <!-- Layers section-->
       <div id="layers" class="ui_content tab hidden">
-        <div class="ui styled accordion">
+        <div class="ui styled accordion show" id="accordion_grid">
           <div id="gender" class="db_filter title active">
             <button class="ui button">Gender</button>
           </div>
@@ -151,12 +152,16 @@
                 <tr>
                   <td class="left aligned">Male</td>
                   <td>
+                    <div class="ui label" id="layers_lbl_0_0">%</div>
                     <i class="stop icon" style="color: #3e2cb0"></i>
                   </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Female</td>
-                  <td><i class="stop icon" style="color: #e64366"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_0_1">%</div>
+                    <i class="stop icon" style="color: #e64366"></i>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -168,53 +173,142 @@
             <table class="ui basic right aligned table">
               <tbody>
                 <tr>
+                  <!-- <tr> 
+                    <td>
+                      <i class="stop icon" style="color: #d1e028"></i>
+                      Kids
+                    </td>
+                    <td class="right aligned">
+                      <div class="ui label" id="layers_lbl_1_0">%</div>
+                    </td>
+                  </tr> -->
                   <td class="left aligned">Kids</td>
-                  <td><i class="stop icon" style="color: #d1e028"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_1_0">%</div>
+                    <i class="stop icon" style="color: #d1e028"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Young</td>
-                  <td><i class="stop icon" style="color: #d8ac3d"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_1_1">%</div>
+                    <i class="stop icon" style="color: #d8ac3d"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Adult</td>
-                  <td><i class="stop icon" style="color: #df7751"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_1_2">%</div>
+                    <i class="stop icon" style="color: #df7751"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Elder</td>
-                  <td><i class="stop icon" style="color: #e64366"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_1_3">%</div>
+                    <i class="stop icon" style="color: #e64366"></i>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div id="group" class="db_filter title">
-            <button class="ui button">Group</button>
+            <button class="ui button">Ethnicity</button>
           </div>
           <div class="content">
             <table class="ui basic right aligned table">
               <tbody>
                 <tr>
                   <td class="left aligned">Caucasian</td>
-                  <td><i class="stop icon" style="color: #3e2cb0"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_2_0">%</div>
+                    <i class="stop icon" style="color: #3e2cb0"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Indian</td>
-                  <td><i class="stop icon" style="color: #d1e028"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_2_1">%</div>
+                    <i class="stop icon" style="color: #d1e028"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Middle Eastern</td>
-                  <td><i class="stop icon" style="color: #e64366"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_2_2">%</div>
+                    <i class="stop icon" style="color: #e64366"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Afro American</td>
-                  <td><i class="stop icon" style="color: #a243e6"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_2_3">%</div>
+                    <i class="stop icon" style="color: #a243e6"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Asian</td>
-                  <td><i class="stop icon" style="color: #e0283e"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_2_4">%</div>
+                    <i class="stop icon" style="color: #e0283e"></i>
+                  </td>
                 </tr>
                 <tr>
                   <td class="left aligned">Other</td>
-                  <td><i class="stop icon" style="color: #2cb0a8"></i></td>
+                  <td>
+                    <div class="ui label" id="layers_lbl_2_5">%</div>
+                    <i class="stop icon" style="color: #2cb0a8"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ui styled accordion not_show" id="accordion_prod">
+          <div id="gaze" class="db_p_filter title active">
+            <button class="ui button">Gaze</button>
+          </div>
+          <div class="content active">
+            <table class="ui basic aligned table">
+              <tbody>
+                <tr>
+                  <td class="left two wide aligned">Min</td>
+                  <td class="six aligned">
+                    <div class="gradient"></div>
+                  </td>
+                  <td class="two wide right aligned">Max</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="object" class="db_p_filter title">
+            <button class="ui button">Focus</button>
+          </div>
+          <div class="content">
+            <table class="ui basic aligned table">
+              <tbody>
+                <tr>
+                  <td class="left two wide aligned">Min</td>
+                  <td class="six aligned">
+                    <div class="gradient"></div>
+                  </td>
+                  <td class="two wide right aligned">Max</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="interaction" class="db_p_filter title">
+            <button class="ui button">Interaction</button>
+          </div>
+          <div class="content">
+            <table class="ui basic aligned table">
+              <tbody>
+                <tr>
+                  <td class="left two wide aligned">Min</td>
+                  <td class="six aligned">
+                    <div class="gradient"></div>
+                  </td>
+                  <td class="two wide right aligned">Max</td>
                 </tr>
               </tbody>
             </table>
@@ -222,22 +316,22 @@
         </div>
       </div>
 
-      <!-- Focus section-->
-      <div id="focus" class="ui_content tab hidden">
+      <!-- Space section-->
+      <div id="space" class="ui_content tab hidden">
         <div class="ui segment">
           <div class="content">
             <table class="ui basic aligned table">
               <tbody>
                 <tr>
-                  <td class="left aligned">Height</td>
-                  <td class="twelve wide">
-                    <div class="ui_slider" id="sldCon_Height"></div>
-                  </td>
-                </tr>
-                <tr>
                   <td class="left aligned">Width</td>
                   <td class="twelve wide">
                     <div class="ui_slider" id="sldCon_Width"></div>
+                  </td>
+                </tr>
+                <tr id="row_Height">
+                  <td class="left aligned">Height</td>
+                  <td class="twelve wide">
+                    <div class="ui_slider" id="sldCon_Height"></div>
                   </td>
                 </tr>
               </tbody>
@@ -284,7 +378,6 @@
 
       <!-- Insights section -->
       <div id="insights" class="tab hidden">
-        <div class="full_page blur_bk_more z1 hidden"></div>
         <div
           class="ui floating clearable dropdown inverted basic button"
           id="drop_Filt"
@@ -387,21 +480,25 @@
           <div class="ui three column grid middle aligned">
             <div class="column">
               <canvas id="pie_Gen"></canvas>
-              <div class="ui basic segment center aligned inverted">Gender</div>
+              <h5 class="ui center aligned header block basic">Gender</h5>
             </div>
             <div class="column">
-              <div class="row aligned">
-                <canvas id="pie_Age"></canvas>
-              </div>
-              <div class="ui basic segment center aligned inverted">Age</div>
+              <canvas id="pie_Age"></canvas>
+              <h5 class="ui center aligned header block basic">Age</h5>
             </div>
             <div class="column">
               <canvas id="pie_Grp"></canvas>
-              <div class="ui basic segment center aligned inverted">Group</div>
+              <h5 class="ui center aligned header block basic">Ethnicity</h5>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Blurred background for modal effect -->
+      <div
+        class="full_page blur_bk_more blur_out z1 no_pt"
+        id="base_blur"
+      ></div>
     </div>
 
     <!-- Threee -->
@@ -414,15 +511,25 @@
 
     <!-- Cameras Toggle -->
     <div class="ui_camera z2">
-      <button class="ui big circular icon button active" id="tgl_camera">
+      <button
+        class="ui big circular icon button active secondary"
+        id="tgl_camera"
+      >
         <i class="cube icon"></i>
       </button>
     </div>
 
-    <!-- Cameras Toggle -->
+    <!-- Focus Toggle -->
+    <div class="ui_focus">
+      <button class="ui big circular icon button active" id="tgl_focus">
+        <i class="user icon"></i>
+      </button>
+    </div>
+
+    <!-- Calendar -->
     <div class="ui_calendar">
       <div class="ui calendar" id="calendar">
-        <button class="ui big circular icon button active" id="tgl_cal">
+        <button class="ui big circular icon button active">
           <i class="calendar alternate outline icon"></i>
         </button>
       </div>
@@ -431,7 +538,7 @@
     <!-- Colophon-->
     <div class="logo">
       <a href="https://noumena.io/en/" target="_blank">
-        <img src="./public/Noumena_logo.png" alt="NOUMENA" width="200" />
+        <img src="./public/Noumena_logo.png" alt="NOUMENA" width="150" />
       </a>
     </div>
 
@@ -445,6 +552,13 @@
         $(this).children(".icon").toggleClass("cube stop");
       });
 
+      $("#tgl_focus").click(function () {
+        $(this).children(".icon").toggleClass("user shopping bag");
+        $("#accordion_grid").toggleClass("show not_show");
+        $("#accordion_prod").toggleClass("show not_show");
+        $("#row_Height").toggleClass("disabled");
+      });
+
       $("#calendar").calendar({ type: "date" });
     </script>
 
@@ -453,32 +567,30 @@
         let tab;
         let tabs;
         let idsBlur = ["insights", "gathering"];
+        let blur = document.getElementById("base_blur");
+
+        // Reset setting
         tabs = document.querySelectorAll(".tab");
         tabs.forEach(function (input) {
           input.classList.add("hidden");
         });
+        blur.classList.add("blur_out");
+        blur.classList.remove("blur_in");
 
+        // Selected visibility
         tab = document.getElementById(id);
         tab.classList.remove("hidden");
         tab.classList.add("visible");
 
-        idsBlur.forEach(function (idBlur) {
-          let tabBlur = document.getElementById(idBlur);
-          let blur = tabBlur.getElementsByClassName("full_page")[0];
-
-          if (!blur.classList.contains("hidden")) {
-            blur.classList.add("hidden");
-            blur.classList.remove("show");
-          }
-
-          if (tabBlur.classList.contains("visible")) {
-            blur.classList.remove("hidden");
-            blur.classList.add("show");
-          }
-        });
+        // If matching the idsBlur activate blur
+        if (idsBlur.indexOf(id) > -1) {
+          blur.classList.remove("blur_out");
+          blur.classList.add("blur_in");
+        }
       }
     </script>
   </body>
 
+  <script type="module" src="./modules/sliders_init.js"></script>
   <script type="module" src="./app.js"></script>
 </html>

@@ -51,28 +51,6 @@ export async function drawPies(grid_vals, keys, colors, subdiv) {
       counts.push(vals_filt.length);
     }
 
-    // Remove empty dataentries
-    // for (let i = 0; i < counts.length; i++) {
-    //   x = [];
-    //   y = [];
-    //   z = [];
-    //   if (counts[i] > 0) {
-    //     x.push(counts[i]);
-    //     y.push(col);
-    //   }
-    // }
-    // counts = counts.filter((element) => {
-    //   return element > 0;
-    // });
-    // colors_sel = counts.forEach((element, index) => {
-    //   let x = [];
-    //   if (element > 0) {
-    //     x.push(colors_sel[index]);
-    //   }
-    //   return x;
-    // });
-    // console.log(colors_sel);
-
     const centerLegend = {
       id: "text",
       afterDraw: function (chart, a, b) {
