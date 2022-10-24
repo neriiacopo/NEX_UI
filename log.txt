@@ -8,3 +8,8 @@ dygraph drawcallback ---- check the ready if its needed -------- this.ready(func
 refine the initial camera setting 
 
 double check why sliders need !import in .css
+
+
+correct the position properties of full_page
+
+clean in app.js updateGrid() and updateProd()

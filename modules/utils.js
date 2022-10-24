@@ -336,3 +336,5 @@ export function makeBaseGrid(scene, grid_res) {
 }
 
 export function makeProdBox(scene, prod_arr) {}
+
+export function calcPpl(arr) {}

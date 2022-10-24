@@ -31,12 +31,16 @@ const gridValsPath = "./models/json/grid_values_10.json";
 const resPath = "./models/csv/grid_res_01.csv";
 const colorsPath = "./styles/colors_viz.json";
 const prodPath = "./models/csv/products.csv";
+const prodExtraPath = "./models/csv/products_spread.csv";
 const prodValsPath = "./models/json/prod_values_10.json";
+const cashFlow = "./models/csv/cash_flow_m.csv";
 
 const pt_arr = await fetchText(ptCloudPath); // PointCloud
 const grid_arr = await fetchText(gridPath); // Array with locations of grid points
 const grid_res = await fetchText(resPath);
 const prod_arr = await fetchText(prodPath);
+const prod_extra = await fetchText(prodExtraPath);
+const cash_flow = await fetchText(cashFlow);
 
 var grid_vals = await fetchJSON(gridValsPath); // Array with the detections
 grid_vals = grid_vals.data;
@@ -392,21 +396,7 @@ function updateProd() {
 function render() {
   let bool = tglGridProd.firstElementChild.classList.contains("user");
   updateGrid();
-
   updateProd();
-
-  // if (bool == true) {
-  //   var selectedObject = scene.getObjectByName("boxes");
-  //   selectedObject.visible = false;
-  //   var selectedObject = scene.getObjectByName("bars");
-  //   selectedObject.visible = true;
-  // } else {
-  //   var selectedObject = scene.getObjectByName("bars");
-  //   selectedObject.visible = false;
-  //   var selectedObject = scene.getObjectByName("boxes");
-  //   selectedObject.visible = true;
-  // }
-
   controls.update();
   renderer.render(scene, camera);
 }
@@ -454,9 +444,9 @@ function tglCamera() {
   cam_i++;
 }
 document.querySelector("#tgl_camera").addEventListener("click", tglCamera);
-document
-  .querySelectorAll(".db_filter")
-  .forEach((input) => input.addEventListener("click", drawChart));
+// document
+//   .querySelectorAll(".db_filter")
+//   .forEach((input) => input.addEventListener("click", drawChart));
 
 // ---------------------------- Insights charts
 
@@ -477,15 +467,18 @@ function roundToTimeUnit(unix, step) {
   return Math.round(((unix * 1000) / ms) * ms);
 }
 
+var container = document.getElementById("dy_container");
+
 var dy_options = {
   title: "",
   legend: "never",
-  ylabel: "Flow",
-  height: 200,
+  ylabel: "Customers",
+  height: 300,
+  width: "auto",
   strokeWidth: 3,
   fillAlpha: 0.2,
   fillGraph: true,
-  rollPeriod: 2,
+  rollPeriod: 60,
   stepPlot: true,
   showLabelsOnHighlight: false,
   rangeSelectorAlpha: 0.1,
@@ -499,15 +492,18 @@ var dy_options = {
     // this.ready(function () {
     let chart_range = this.xAxisRange().concat(); // Get boundaries of range selector
     let id_arr = []; // Array of indexes of grid_vals to then slice in render()
+    let ppl_arr = [];
     let timeStamps = [];
 
     // Check if indexes are within range selector
     for (let id = 0; id < grid_vals.length; id++) {
       let dt = grid_vals[id].timestamp;
+      let ppl = grid_vals[id].person;
       timeStamps.push(dt);
       // let dt = (timeStamp - (timeStamp % 60)) * 1000;
       if (chart_range[0] / 1000 <= dt && dt <= chart_range[1] / 1000) {
         id_arr.push(dt);
+        ppl_arr.push(ppl);
       }
     }
 
@@ -519,11 +515,23 @@ var dy_options = {
         timeStamps.indexOf(id_arr.slice(-1)[0]),
       ]; // Store values in time_range
     }
+
+    // Replace values of customers
+    let ppl = new Set(ppl_arr);
+    let label_ppl = document.querySelectorAll(".curr_cl");
+    console.log(label_ppl);
+    label_ppl.forEach(function (lbl) {
+      lbl.textContent = ppl.size;
+    });
   },
 };
 
+tglGridProd.addEventListener("click", drawChart);
+
 async function drawChart() {
+  let toggle = tglGridProd.firstElementChild.classList.contains("user");
   let detections = grid_vals;
+
   // Update Chart on UI selector
   setTimeout(async function () {
     let filter_grid = document.querySelector(".db_filter.active").id;
@@ -547,27 +555,83 @@ async function drawChart() {
       db.push([new Date(timeStamp_unique[i])]);
     }
 
-    // Loop for values of filters
-    for (let i = 0; i < subdiv[f]; i++) {
+    // Calculate sum
+    let vals_filt = [];
+    let timeStamp_filt = [];
+    for (const detection of detections) {
+      let time = detection.timestamp;
+      let time_round = roundToTimeUnit(time, time_step);
+      timeStamp_filt.push(time_round);
+    }
+
+    let offset = 0;
+    let ch_counts = [...Array(ch_lim)].map((x) => offset);
+    for (const num of timeStamp_filt) {
+      let id = timeStamp_unique.indexOf(num);
+      ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
+    }
+
+    for (let i = 0; i < ch_lim; i++) {
+      let item = db[i];
+      db[i] = item.concat(ch_counts[i]);
+    }
+    if (toggle == true) {
+      // Loop for values of filters
+      for (let i = 0; i < subdiv[f]; i++) {
+        let vals_filt = [];
+        let timeStamp_filt = [];
+
+        // Prepare filtered values
+        for (const detection of detections) {
+          if (detection[key] == i) {
+            vals_filt.push(detection.id);
+            let time = detection.timestamp;
+            let time_round = roundToTimeUnit(time, time_step);
+            timeStamp_filt.push(time_round);
+          }
+        }
+
+        // Calculate counts per timestamp
+        let offset = 0.05 * i;
+        let ch_counts = [...Array(ch_lim)].map((x) => offset);
+        for (const num of timeStamp_filt) {
+          let id = timeStamp_unique.indexOf(num);
+          ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
+        }
+
+        for (let i = 0; i < ch_lim; i++) {
+          let item = db[i];
+          db[i] = item.concat(ch_counts[i]);
+        }
+
+        if (i == 0) {
+          try {
+            chart.destroy();
+          } catch (e) {}
+        }
+      }
+    } else {
+      // Loop for values of filters
       let vals_filt = [];
+      let vals_filt_m = [];
       let timeStamp_filt = [];
 
       // Prepare filtered values
-      for (const detection of detections) {
-        if (detection[key] == i) {
-          vals_filt.push(detection.id);
-          let time = detection.timestamp;
-          let time_round = roundToTimeUnit(time, time_step);
-          timeStamp_filt.push(time_round);
-        }
+      for (const x of cash_flow) {
+        let time = x.timestamp;
+        let time_round = roundToTimeUnit(time, time_step);
+        timeStamp_filt.push(time_round);
+        vals_filt.push(x.cash);
+        vals_filt_m.push(x.cash_m);
       }
 
       // Calculate counts per timestamp
-      let offset = 0.05 * i;
+      let offset = null;
       let ch_counts = [...Array(ch_lim)].map((x) => offset);
       for (const num of timeStamp_filt) {
         let id = timeStamp_unique.indexOf(num);
-        ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
+        let id2 = timeStamp_filt.indexOf(num);
+        ch_counts[id] = vals_filt[id2]; // Count occurrencies per timestamp
       }
 
       for (let i = 0; i < ch_lim; i++) {
@@ -575,19 +639,32 @@ async function drawChart() {
         db[i] = item.concat(ch_counts[i]);
       }
 
-      if (i == 0) {
-        try {
-          chart.destroy();
-        } catch (e) {}
+      ch_counts = [...Array(ch_lim)].map((x) => offset);
+      for (const num of timeStamp_filt) {
+        let id = timeStamp_unique.indexOf(num);
+        let id2 = timeStamp_filt.indexOf(num);
+        ch_counts[id] = vals_filt_m[id2]; // Count occurrencies per timestamp
       }
+
+      for (let i = 0; i < ch_lim; i++) {
+        let item = db[i];
+        db[i] = item.concat(ch_counts[i]);
+      }
+
+      try {
+        chart.destroy();
+      } catch (e) {}
+      colors_sel = "#39ff14";
     }
 
     await new Dygraph(chart, db, dy_options).updateOptions({
-      colors: colors_sel,
-      labels: ["Date", "d1", "d2", "d3", "d4", "d5", "d6"],
+      colors: ["#d3d3d3"].concat(colors_sel),
+      labels: ["Date", "d1", "d2", "d3", "d4", "d5", "d6", "d7"],
     });
   }, 0);
 }
+
+document.querySelector("#chartRef").addEventListener("click", drawChart);
 
 // ---------------------------------------------------------------------------------------------- INIT
 init();

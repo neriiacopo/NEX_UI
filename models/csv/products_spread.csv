@@ -1,0 +1,121 @@
+side;cell_id;brand;product;date
+left;0;Nike;product_12;2022/10/13
+left;1;Nike;product_9;2022/10/7
+left;2;Nike Air;product_8;2022/10/3
+left;3;Nike;product_11;2022/10/17
+left;4;Nike;product_33;2022/10/2
+left;5;Nike Air;product_2;2022/10/5
+left;6;Adidas;product_7;2022/10/14
+left;7;Nike Dunk;product_11;2022/10/8
+left;8;Adidas;product_17;2022/10/4
+left;9;Nike Air;product_14;2022/10/0
+left;10;Converse;product_4;2022/10/13
+left;11;Nike Air;product_18;2022/10/0
+left;12;Nike;product_20;2022/10/0
+left;13;Adidas;product_9;2022/10/9
+left;14;Nike;product_19;2022/10/6
+left;15;Nike Air;product_20;2022/10/5
+left;16;Nike Air;product_26;2022/10/12
+left;17;Nike;product_28;2022/10/4
+left;18;Nike Air;product_1;2022/10/12
+left;19;Nike;product_4;2022/10/2
+left;20;Nike;product_32;2022/10/1
+left;21;Nike;product_2;2022/10/6
+left;22;Adidas;product_14;2022/10/6
+left;23;Nike Dunk;product_5;2022/10/12
+left;24;Adidas;product_1;2022/10/15
+left;25;Nike Dunk;product_9;2022/10/14
+left;26;Balencia;product_0;2022/10/11
+left;27;Nike;product_8;2022/10/16
+left;28;Nike;product_17;2022/10/2
+left;29;Nike Dunk;product_1;2022/10/12
+left;30;Converse;product_9;2022/10/16
+left;31;Nike Air;product_4;2022/10/17
+left;32;Nike Air;product_3;2022/10/2
+left;33;Nike;product_15;2022/10/1
+left;34;Nike;product_5;2022/10/6
+left;35;Nike Air;product_21;2022/10/14
+left;36;Adidas;product_18;2022/10/12
+left;37;Converse;product_0;2022/10/13
+left;38;Nike;product_22;2022/10/12
+left;39;Adidas;product_12;2022/10/2
+left;40;Nike;product_34;2022/10/1
+left;41;Nike;product_21;2022/10/5
+left;42;Converse;product_14;2022/10/4
+left;43;Nike Air;product_10;2022/10/8
+left;44;Nike Air;product_24;2022/10/16
+left;45;Nike;product_1;2022/10/9
+left;46;Converse;product_8;2022/10/0
+left;47;Nike;product_14;2022/10/8
+left;48;Nike Dunk;product_3;2022/10/6
+left;49;Nike Dunk;product_8;2022/10/8
+left;50;Nike Air;product_17;2022/10/11
+left;51;Nike;product_7;2022/10/11
+left;52;Nike Air;product_19;2022/10/1
+left;53;Converse;product_5;2022/10/15
+left;54;Nike Dunk;product_4;2022/10/10
+left;55;Balencia;product_1;2022/10/7
+left;56;Nike Air;product_11;2022/10/1
+left;57;Nike Air;product_9;2022/10/7
+left;58;Nike Air;product_5;2022/10/2
+left;59;Nike;product_13;2022/10/5
+right;60;Converse;product_13;2022/10/11
+right;61;Converse;product_16;2022/10/15
+right;62;Adidas;product_2;2022/10/6
+right;63;Nike Air;product_25;2022/10/9
+right;64;Converse;product_12;2022/10/1
+right;65;Adidas;product_5;2022/10/13
+right;66;Nike Air;product_7;2022/10/16
+right;67;Adidas;product_15;2022/10/16
+right;68;Adidas;product_3;2022/10/3
+right;69;Nike Air;product_16;2022/10/9
+right;70;Adidas;product_16;2022/10/10
+right;71;Nike Air;product_13;2022/10/16
+right;72;Nike Dunk;product_10;2022/10/9
+right;73;Adidas;product_6;2022/10/11
+right;74;Nike Air;product_12;2022/10/1
+right;75;Nike;product_26;2022/10/14
+right;76;Nike Dunk;product_2;2022/10/1
+right;77;Nike Air;product_22;2022/10/14
+right;78;Converse;product_10;2022/10/13
+right;79;Nike;product_36;2022/10/6
+right;80;Nike Air;product_0;2022/10/14
+right;81;Converse;product_3;2022/10/3
+right;82;Nike;product_29;2022/10/10
+right;83;Nike;product_0;2022/10/10
+right;84;Nike;product_16;2022/10/1
+right;85;Nike Dunk;product_7;2022/10/5
+right;86;Nike;product_23;2022/10/15
+right;87;Nike;product_18;2022/10/4
+right;88;Nike;product_37;2022/10/8
+right;89;Converse;product_15;2022/10/15
+right;90;Nike;product_10;2022/10/13
+right;91;Nike;product_6;2022/10/4
+right;92;Converse;product_11;2022/10/11
+right;93;Adidas;product_11;2022/10/7
+right;94;Nike Dunk;product_0;2022/10/7
+right;95;Converse;product_7;2022/10/3
+right;96;Nike Air;product_27;2022/10/16
+right;97;Adidas;product_13;2022/10/12
+right;98;Converse;product_17;2022/10/7
+right;99;Adidas;product_8;2022/10/3
+right;100;Converse;product_1;2022/10/11
+right;101;Nike;product_25;2022/10/1
+right;102;Adidas;product_10;2022/10/5
+right;103;Converse;product_6;2022/10/14
+right;104;Nike;product_35;2022/10/15
+right;105;Nike Air;product_23;2022/10/12
+right;106;Nike;product_24;2022/10/1
+right;107;Nike Air;product_15;2022/10/7
+right;108;Converse;product_2;2022/10/14
+right;109;Adidas;product_19;2022/10/13
+right;110;Balencia;product_2;2022/10/6
+right;111;Nike;product_3;2022/10/4
+right;112;Nike Dunk;product_6;2022/10/11
+right;113;Nike Air;product_28;2022/10/13
+right;114;Nike;product_30;2022/10/9
+right;115;Nike;product_27;2022/10/8
+right;116;Nike Air;product_6;2022/10/5
+right;117;Adidas;product_4;2022/10/12
+right;118;Adidas;product_0;2022/10/8
+right;119;Nike;product_31;2022/10/13

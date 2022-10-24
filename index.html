@@ -10,7 +10,8 @@
 
     <!-- Font -->
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+      /* @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap"); */
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
       @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
     </style>
 
@@ -34,6 +35,8 @@
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+    <script src="./modules/js_fun.js"></script>
 
     <!-- CHART.JS-->
     <script src="./modules/chartjs/chart.min.js"></script>
@@ -68,316 +71,308 @@
   <body id="body">
     <div id="ui_wrapper">
       <div class="menu_wrapper">
-        <!-- Nav Bar-->
-        <div class="ui stackable container menu header">
-          <div class="item left" onclick="showTab('')">
-            <img src="./public/NEX_logo.png" width="100" />
-          </div>
-          <a class="item" onclick="showTab('layers')">Layers</a>
-          <a class="item" onclick="showTab('space')">Space</a>
-          <a class="item" onclick="showTab('insights')">Data</a>
-          <a class="item" onclick="showTab('gathering')">Info</a>
+        <div class="left floated ui">
+          <button
+            onclick="show('3d_viz'); blurOut(); tglActive(this)"
+            class="ui button big head_btns inverted"
+          >
+            SPACE
+          </button>
+          <button
+            onclick="show('flow'); showHandles(); tglActive(this); blurIn();"
+            class="ui button big head_btns inverted"
+            id="chartRef"
+          >
+            FLOW
+          </button>
+
+          <button
+            onclick="show('insights'); tglActive(this); blurIn();"
+            class="ui button big head_btns inverted"
+          >
+            INSIGHTS
+          </button>
         </div>
       </div>
 
-      <!-- Gathering section-->
-      <div id="gathering" class="tab hidden">
-        <div class="ui three column grid">
-          <div class="column">
-            <div class="ui fluid card">
-              <div class="image bw">
-                <img src="./public/gath_1.jpg" />
+      <!-- 3D model -->
+      <div class="ui ui_content hidden" id="3d_viz">
+        <div class="ui grid fluid">
+          <div class="ui column sub_menu">
+            <div class="ui buttons vertical">
+              <button
+                class="ui small circular icon inverted button"
+                onclick="show('layers'); tglActive(this)"
+              >
+                <i class="database icon"></i>
+              </button>
+              <button
+                class="ui small circular icon inverted button"
+                onclick="show('space'); tglActive(this)"
+              >
+                <i class="eye icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Layers section-->
+          <div class="ui column fourteen wide left">
+            <div id="layers" class="hidden">
+              <div
+                class="ui styled accordion circular show"
+                id="accordion_grid"
+              >
+                <div id="gender" class="db_filter title aligned active">
+                  <button class="ui button">Gender</button>
+                  <i class="dropdown icon f-right"></i>
+                </div>
+                <div class="content active">
+                  <table class="ui basic right aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">Male</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_0_0">%</div>
+                          <i class="stop icon" style="color: #3e2cb0"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Female</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_0_1">%</div>
+                          <i class="stop icon" style="color: #e64366"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="age" class="db_filter title">
+                  <button class="ui button">Age</button>
+                  <i class="dropdown icon f-right"></i>
+                </div>
+                <div class="content">
+                  <table class="ui basic right aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">Kids</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_1_0">%</div>
+                          <i class="stop icon" style="color: #d1e028"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Young</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_1_1">%</div>
+                          <i class="stop icon" style="color: #d8ac3d"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Adult</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_1_2">%</div>
+                          <i class="stop icon" style="color: #df7751"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Elder</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_1_3">%</div>
+                          <i class="stop icon" style="color: #e64366"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="group" class="db_filter title">
+                  <button class="ui button">Ethnicity</button>
+                  <i class="dropdown icon f-right"></i>
+                </div>
+                <div class="content">
+                  <table class="ui basic right aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">Caucasian</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_2_0">%</div>
+                          <i class="stop icon" style="color: #3e2cb0"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Indian</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_2_1">%</div>
+                          <i class="stop icon" style="color: #d1e028"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Middle Eastern</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_2_2">%</div>
+                          <i class="stop icon" style="color: #e64366"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Afro American</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_2_3">%</div>
+                          <i class="stop icon" style="color: #a243e6"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Asian</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_2_4">%</div>
+                          <i class="stop icon" style="color: #e0283e"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Other</td>
+                        <td>
+                          <div class="ui label" id="layers_lbl_2_5">%</div>
+                          <i class="stop icon" style="color: #2cb0a8"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <div class="ui content">
-                <h5 class="ui">Demographic Segmentation</h5>
+              <div class="ui styled accordion not_show" id="accordion_prod">
+                <div id="gaze" class="db_p_filter title active">
+                  <button class="ui button">Gaze</button>
+                </div>
+                <div class="content active">
+                  <table class="ui basic aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left two wide aligned">Min</td>
+                        <td class="six aligned">
+                          <div class="gradient"></div>
+                        </td>
+                        <td class="two wide right aligned">Max</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="object" class="db_p_filter title">
+                  <button class="ui button">Focus</button>
+                </div>
+                <div class="content">
+                  <table class="ui basic aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left two wide aligned">Min</td>
+                        <td class="six aligned">
+                          <div class="gradient"></div>
+                        </td>
+                        <td class="two wide right aligned">Max</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="interaction" class="db_p_filter title">
+                  <button class="ui button">Interaction</button>
+                </div>
+                <div class="content">
+                  <table class="ui basic aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left two wide aligned">Min</td>
+                        <td class="six aligned">
+                          <div class="gradient"></div>
+                        </td>
+                        <td class="two wide right aligned">Max</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <div class="ui content">
-                <div class="ui description">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Soluta ex sit molestiae. Libero voluptate dolores aspernatur
-                  maiores labore optio ex deserunt? Eligendi rerum quod possimus
-                  praesentium iste id quam? Cupiditate.
+            </div>
+
+            <!-- Space section-->
+            <div id="space" class="hidden">
+              <div class="ui segment">
+                <div class="content">
+                  <table class="ui basic aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">Width</td>
+                        <td class="twelve wide">
+                          <div class="ui_slider" id="sldCon_Width"></div>
+                        </td>
+                      </tr>
+                      <tr id="row_Height">
+                        <td class="left aligned">Height</td>
+                        <td class="twelve wide">
+                          <div class="ui_slider" id="sldCon_Height"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class="ui basic aligned table">
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">Min/Max</td>
+                        <td class="twelve wide">
+                          <div class="ui_slider" id="sldRan_Clip"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left aligned">Skew</td>
+                        <td class="twelve wide">
+                          <div class="ui_slider" id="sldCon_Skew"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class="ui basic aligned inverted table fluid">
+                    <tbody>
+                      <tr>
+                        <td class="sixteen wide">
+                          <select class="ui fluid dropdown" id="drop_Foc">
+                            <option value="">None</option>
+                            <option value="dist1">Left expo</option>
+                            <option value="dist2">Right expo</option>
+                            <option value="dist3">Entrance</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="sixteen wide">
+                          <div class="ui_slider" id="sldCon_Foc"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button class="ui button" id="btn_reset">Reset</button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="column">
-            <div class="ui fluid card">
-              <div class="image bw">
-                <img src="./public/gath_2.jpg" />
-              </div>
-              <div class="ui content">
-                <h5 class="ui">Semantic Segmentation</h5>
-              </div>
-              <div class="ui content">
-                <div class="description">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Soluta ex sit molestiae. Libero voluptate dolores aspernatur
-                  maiores labore optio ex deserunt? Eligendi rerum quod possimus
-                  praesentium iste id quam? Cupiditate.
-                </div>
-              </div>
-            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="ui statistics inverted floated bottom tiny" id="stats">
+          <div class="ui statistic">
+            <div class="value curr_cl"></div>
+            <div class="label">visits</div>
           </div>
-          <div class="column">
-            <div class="ui fluid card">
-              <div class="image bw">
-                <img src="./public/gath_3.jpg" />
-              </div>
-              <div class="ui content">
-                <h5 class="ui">Costumer - Product Interaction</h5>
-              </div>
-              <div class="ui content">
-                <div class="description">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Soluta ex sit molestiae. Libero voluptate dolores aspernatur
-                  maiores labore optio ex deserunt? Eligendi rerum quod possimus
-                  praesentium iste id quam? Cupiditate.
-                </div>
-              </div>
-            </div>
+          <div class="ui statistic">
+            <div class="value prod_len">120</div>
+            <div class="label">units</div>
+          </div>
+          <div class="ui statistic">
+            <div class="value">734 $</div>
+            <div class="label">AVG tickets</div>
+          </div>
+          <div class="ui statistic">
+            <div class="value">8830 $</div>
+            <div class="label">total Sales</div>
           </div>
         </div>
       </div>
 
-      <!-- Layers section-->
-      <div id="layers" class="ui_content tab hidden">
-        <div class="ui styled accordion show" id="accordion_grid">
-          <div id="gender" class="db_filter title active">
-            <button class="ui button">Gender</button>
-          </div>
-          <div class="content active">
-            <table class="ui basic right aligned table">
-              <tbody>
-                <tr>
-                  <td class="left aligned">Male</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_0_0">%</div>
-                    <i class="stop icon" style="color: #3e2cb0"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Female</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_0_1">%</div>
-                    <i class="stop icon" style="color: #e64366"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div id="age" class="db_filter title active">
-            <button class="ui button">Age</button>
-          </div>
-          <div class="content">
-            <table class="ui basic right aligned table">
-              <tbody>
-                <tr>
-                  <!-- <tr> 
-                    <td>
-                      <i class="stop icon" style="color: #d1e028"></i>
-                      Kids
-                    </td>
-                    <td class="right aligned">
-                      <div class="ui label" id="layers_lbl_1_0">%</div>
-                    </td>
-                  </tr> -->
-                  <td class="left aligned">Kids</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_1_0">%</div>
-                    <i class="stop icon" style="color: #d1e028"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Young</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_1_1">%</div>
-                    <i class="stop icon" style="color: #d8ac3d"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Adult</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_1_2">%</div>
-                    <i class="stop icon" style="color: #df7751"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Elder</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_1_3">%</div>
-                    <i class="stop icon" style="color: #e64366"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div id="group" class="db_filter title">
-            <button class="ui button">Ethnicity</button>
-          </div>
-          <div class="content">
-            <table class="ui basic right aligned table">
-              <tbody>
-                <tr>
-                  <td class="left aligned">Caucasian</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_2_0">%</div>
-                    <i class="stop icon" style="color: #3e2cb0"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Indian</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_2_1">%</div>
-                    <i class="stop icon" style="color: #d1e028"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Middle Eastern</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_2_2">%</div>
-                    <i class="stop icon" style="color: #e64366"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Afro American</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_2_3">%</div>
-                    <i class="stop icon" style="color: #a243e6"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Asian</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_2_4">%</div>
-                    <i class="stop icon" style="color: #e0283e"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Other</td>
-                  <td>
-                    <div class="ui label" id="layers_lbl_2_5">%</div>
-                    <i class="stop icon" style="color: #2cb0a8"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="ui styled accordion not_show" id="accordion_prod">
-          <div id="gaze" class="db_p_filter title active">
-            <button class="ui button">Gaze</button>
-          </div>
-          <div class="content active">
-            <table class="ui basic aligned table">
-              <tbody>
-                <tr>
-                  <td class="left two wide aligned">Min</td>
-                  <td class="six aligned">
-                    <div class="gradient"></div>
-                  </td>
-                  <td class="two wide right aligned">Max</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div id="object" class="db_p_filter title">
-            <button class="ui button">Focus</button>
-          </div>
-          <div class="content">
-            <table class="ui basic aligned table">
-              <tbody>
-                <tr>
-                  <td class="left two wide aligned">Min</td>
-                  <td class="six aligned">
-                    <div class="gradient"></div>
-                  </td>
-                  <td class="two wide right aligned">Max</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div id="interaction" class="db_p_filter title">
-            <button class="ui button">Interaction</button>
-          </div>
-          <div class="content">
-            <table class="ui basic aligned table">
-              <tbody>
-                <tr>
-                  <td class="left two wide aligned">Min</td>
-                  <td class="six aligned">
-                    <div class="gradient"></div>
-                  </td>
-                  <td class="two wide right aligned">Max</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Space section-->
-      <div id="space" class="ui_content tab hidden">
-        <div class="ui segment">
-          <div class="content">
-            <table class="ui basic aligned table">
-              <tbody>
-                <tr>
-                  <td class="left aligned">Width</td>
-                  <td class="twelve wide">
-                    <div class="ui_slider" id="sldCon_Width"></div>
-                  </td>
-                </tr>
-                <tr id="row_Height">
-                  <td class="left aligned">Height</td>
-                  <td class="twelve wide">
-                    <div class="ui_slider" id="sldCon_Height"></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <table class="ui basic aligned table">
-              <tbody>
-                <tr>
-                  <td class="left aligned">Min/Max</td>
-                  <td class="twelve wide">
-                    <div class="ui_slider" id="sldRan_Clip"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="left aligned">Skew</td>
-                  <td class="twelve wide">
-                    <div class="ui_slider" id="sldCon_Skew"></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <table class="ui basic aligned inverted table fluid">
-              <tbody>
-                <tr>
-                  <td class="sixteen wide">
-                    <select class="ui fluid dropdown" id="drop_Foc">
-                      <option value="">None</option>
-                      <option value="dist1">Left expo</option>
-                      <option value="dist2">Right expo</option>
-                      <option value="dist3">Entrance</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="sixteen wide">
-                    <div class="ui_slider" id="sldCon_Foc"></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button class="ui button" id="btn_reset">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Insights section -->
-      <div id="insights" class="tab hidden">
+      <div class="page hidden" id="insights">
         <div
           class="ui floating clearable dropdown inverted basic button"
           id="drop_Filt"
@@ -476,82 +471,124 @@
             </div>
           </div>
         </div>
-        <div class="ui fluid">
-          <div class="ui three column grid middle aligned">
-            <div class="column">
-              <canvas id="pie_Gen"></canvas>
-              <h5 class="ui center aligned header block basic">Gender</h5>
+        <div class=""></div>
+        <div class="ui grid fluid sixteen wide middle aligned">
+          <div class="ui column one wide"></div>
+          <div class="ui column seven wide">
+            <canvas id="pie_Gen"></canvas>
+          </div>
+
+          <div class="ui column three wide">
+            <div class="row"><canvas class="" id="pie_Age"></canvas></div>
+            <div class="row">
+              <canvas class="" id="pie_Grp"></canvas>
             </div>
-            <div class="column">
-              <canvas id="pie_Age"></canvas>
-              <h5 class="ui center aligned header block basic">Age</h5>
-            </div>
-            <div class="column">
-              <canvas id="pie_Grp"></canvas>
-              <h5 class="ui center aligned header block basic">Ethnicity</h5>
+            <div class="row"></div>
+          </div>
+
+          <div class="ui column four wide middle aligned">
+            <div class="ui horizontal statistics inverted">
+              <div class="statistic">
+                <div class="value curr_cl"></div>
+                <div class="label">Total Visits</div>
+              </div>
+              <div class="statistic">
+                <div class="value">2309 $</div>
+                <div class="label">Total Sales</div>
+              </div>
+              <div class="statistic">
+                <div class="value">445</div>
+                <div class="label">Average Ticket</div>
+              </div>
+              <div class="statistic">
+                <div class="value">14.56%</div>
+                <div class="label">Occupancy rate</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Blurred background for modal effect -->
-      <div
-        class="full_page blur_bk_more blur_out z1 no_pt"
-        id="base_blur"
-      ></div>
-    </div>
+      <!-- Flow charts -->
+      <div class="ui grid sixteen wide hidden" id="flow">
+        <div class="ui column twelve wide" id="dy_container">
+          <div id="chart" style="min-width: 100%"></div>
+        </div>
+        <div class="ui column three wide middle aligned">
+          <div class="ui horizontal statistics inverted">
+            <div class="statistic">
+              <div class="value curr_cl"></div>
+              <div class="label">Customers</div>
+            </div>
+            <div class="statistic">
+              <div class="value">50</div>
+              <div class="label">Daily Visits</div>
+            </div>
+            <div class="statistic">
+              <div class="value">445</div>
+              <div class="label">Weekly Visits</div>
+            </div>
+            <div class="statistic">
+              <div class="value">1200</div>
+              <div class="label">Monthly Visits</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- Threee -->
-    <div id="canvas" class="z3"></div>
+      <!-- Logo -->
+      <div class="ui horizontal list floated bottom" id="logo">
+        <img
+          class="floated bottom"
+          src="./public/NOUMENA_logo.png"
+          alt="NOUMENA"
+          height="100%"
+          width="100px"
+        />
+      </div>
 
-    <!-- Chart -->
-    <div class="ui content chart_container blur_bk z2">
-      <div id="chart" class="sticky-bottom"></div>
-    </div>
-
-    <!-- Cameras Toggle -->
-    <div class="ui_camera z2">
-      <button
-        class="ui big circular icon button active secondary"
-        id="tgl_camera"
-      >
-        <i class="cube icon"></i>
-      </button>
-    </div>
-
-    <!-- Focus Toggle -->
-    <div class="ui_focus">
-      <button class="ui big circular icon button active" id="tgl_focus">
-        <i class="user icon"></i>
-      </button>
-    </div>
-
-    <!-- Calendar -->
-    <div class="ui_calendar">
-      <div class="ui calendar" id="calendar">
-        <button class="ui big circular icon button active">
+      <!-- Cameras Toggle -->
+      <div class="ui_buttons">
+        <button
+          class="ui big circular icon button active secondary z2"
+          id="tgl_camera"
+        >
+          <i class="cube icon"></i>
+        </button>
+        <button class="ui big circular icon button" id="tgl_focus">
+          <i class="user icon"></i>
+        </button>
+        <button class="ui big circular icon button" id="tgl_calendar">
           <i class="calendar alternate outline icon"></i>
         </button>
       </div>
     </div>
 
-    <!-- Colophon-->
-    <div class="logo">
-      <a href="https://noumena.io/en/" target="_blank">
-        <img src="./public/Noumena_logo.png" alt="NOUMENA" width="150" />
-      </a>
-    </div>
+    <!-- Blurred background for modal effect -->
+    <div class="full_page blur_bk_more blur_out z1 no_pt" id="base_blur"></div>
 
-    <!-- Initiate Accordion -->
     <script>
       $(".ui.accordion").accordion();
       $(".ui.dropdown").dropdown();
 
+      // Settings for cameras
       $("#tgl_camera").click(function () {
         $(this).toggleClass("active");
         $(this).children(".icon").toggleClass("cube stop");
       });
 
+      // Settings for time-flow
+      $("#tgl_timegraph").click(function () {
+        $(this).toggleClass("active");
+        $("#chart_time").toggleClass("invisible visible");
+        $(
+          ".dygraph-rangesel-fgcanvas, .dygraph-rangesel-zoomhandle"
+        ).toggleClass("invisible visible");
+        resetMenu();
+        blurIn();
+      });
+
+      // Settings for customers/prod
       $("#tgl_focus").click(function () {
         $(this).children(".icon").toggleClass("user shopping bag");
         $("#accordion_grid").toggleClass("show not_show");
@@ -559,38 +596,13 @@
         $("#row_Height").toggleClass("disabled");
       });
 
-      $("#calendar").calendar({ type: "date" });
+      $("#tgl_calendar").calendar({ type: "date" });
     </script>
-
-    <script>
-      function showTab(id) {
-        let tab;
-        let tabs;
-        let idsBlur = ["insights", "gathering"];
-        let blur = document.getElementById("base_blur");
-
-        // Reset setting
-        tabs = document.querySelectorAll(".tab");
-        tabs.forEach(function (input) {
-          input.classList.add("hidden");
-        });
-        blur.classList.add("blur_out");
-        blur.classList.remove("blur_in");
-
-        // Selected visibility
-        tab = document.getElementById(id);
-        tab.classList.remove("hidden");
-        tab.classList.add("visible");
-
-        // If matching the idsBlur activate blur
-        if (idsBlur.indexOf(id) > -1) {
-          blur.classList.remove("blur_out");
-          blur.classList.add("blur_in");
-        }
-      }
-    </script>
+    <!-- Threee -->
+    <div id="canvas" class="z3"></div>
   </body>
 
   <script type="module" src="./modules/sliders_init.js"></script>
+  <script type="module" src="./modules/js_fun.js"></script>
   <script type="module" src="./app.js"></script>
 </html>
