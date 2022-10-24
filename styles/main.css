@@ -257,8 +257,8 @@ path {
 
 .full_page {
   position: absolute;
-  margin-top: -1000px;
-  margin-left: -1000px;
+  margin-top: -100vh;
+  margin-left: -100vw;
   height: 1000vh;
   width: 1000vw;
   z-index: -9;
