@@ -70,468 +70,611 @@
 
   <body id="body">
     <div id="ui_wrapper">
+      <!-- HEADERS Section ---------------------------------------------------------------------------->
       <div class="menu_wrapper">
+        <!-- MAIN MENU -->
         <div class="left floated ui">
           <button
-            onclick="show('3d_viz'); blurOut(); tglActive(this)"
-            class="ui button big head_btns inverted"
+            onclick="show('customers'); blurOut(); tglActive(this)"
+            class="ui button big head_btns inverted active"
           >
-            SPACE
+            CUSTOMERS
           </button>
           <button
-            onclick="show('flow'); showHandles(); tglActive(this); blurIn();"
+            id="menu_prod"
+            onclick="show('products');
+            tglActive(this); blurOut();"
             class="ui button big head_btns inverted"
-            id="chartRef"
           >
-            FLOW
+            PRODUCT
           </button>
 
           <button
-            onclick="show('insights'); tglActive(this); blurIn();"
+            onclick="show('report'); tglActive(this); blurIn();"
             class="ui button big head_btns inverted"
           >
-            INSIGHTS
+            REPORT
+          </button>
+        </div>
+        <!-- TOP-RIGHT BUTTONS -->
+        <div class="ui_buttons">
+          <button class="ui big circular icon button secondary" id="tgl_camera">
+            <i class="cube icon"></i>
+          </button>
+          <button
+            class="ui big circular icon button secondary"
+            onclick="showHandles()"
+            id="tgl_vis"
+          >
+            <i class="icon eye"></i>
+          </button>
+          <button class="ui big circular icon button" id="tgl_calendar">
+            <i class="calendar alternate outline icon"></i>
           </button>
         </div>
       </div>
 
-      <!-- 3D model -->
-      <div class="ui ui_content hidden" id="3d_viz">
-        <div class="ui grid fluid">
-          <div class="ui column sub_menu">
-            <div class="ui buttons vertical">
-              <button
-                class="ui small circular icon inverted button"
-                onclick="show('layers'); tglActive(this)"
-              >
-                <i class="database icon"></i>
-              </button>
-              <button
-                class="ui small circular icon inverted button"
-                onclick="show('space'); tglActive(this)"
-              >
-                <i class="eye icon"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Layers section-->
-          <div class="ui column fourteen wide left">
-            <div id="layers" class="hidden">
-              <div
-                class="ui styled accordion circular show"
-                id="accordion_grid"
-              >
-                <div id="gender" class="db_filter title aligned active">
-                  <button class="ui button">Gender</button>
-                  <i class="dropdown icon f-right"></i>
-                </div>
-                <div class="content active">
-                  <table class="ui basic right aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left aligned">Male</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_0_0">%</div>
-                          <i class="stop icon" style="color: #3e2cb0"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Female</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_0_1">%</div>
-                          <i class="stop icon" style="color: #e64366"></i>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div id="age" class="db_filter title">
-                  <button class="ui button">Age</button>
-                  <i class="dropdown icon f-right"></i>
-                </div>
-                <div class="content">
-                  <table class="ui basic right aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left aligned">Kids</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_1_0">%</div>
-                          <i class="stop icon" style="color: #d1e028"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Young</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_1_1">%</div>
-                          <i class="stop icon" style="color: #d8ac3d"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Adult</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_1_2">%</div>
-                          <i class="stop icon" style="color: #df7751"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Elder</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_1_3">%</div>
-                          <i class="stop icon" style="color: #e64366"></i>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div id="group" class="db_filter title">
-                  <button class="ui button">Ethnicity</button>
-                  <i class="dropdown icon f-right"></i>
-                </div>
-                <div class="content">
-                  <table class="ui basic right aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left aligned">Caucasian</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_2_0">%</div>
-                          <i class="stop icon" style="color: #3e2cb0"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Indian</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_2_1">%</div>
-                          <i class="stop icon" style="color: #d1e028"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Middle Eastern</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_2_2">%</div>
-                          <i class="stop icon" style="color: #e64366"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Afro American</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_2_3">%</div>
-                          <i class="stop icon" style="color: #a243e6"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Asian</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_2_4">%</div>
-                          <i class="stop icon" style="color: #e0283e"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Other</td>
-                        <td>
-                          <div class="ui label" id="layers_lbl_2_5">%</div>
-                          <i class="stop icon" style="color: #2cb0a8"></i>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="ui styled accordion not_show" id="accordion_prod">
-                <div id="gaze" class="db_p_filter title active">
-                  <button class="ui button">Gaze</button>
-                </div>
-                <div class="content active">
-                  <table class="ui basic aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left two wide aligned">Min</td>
-                        <td class="six aligned">
-                          <div class="gradient"></div>
-                        </td>
-                        <td class="two wide right aligned">Max</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div id="object" class="db_p_filter title">
-                  <button class="ui button">Focus</button>
-                </div>
-                <div class="content">
-                  <table class="ui basic aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left two wide aligned">Min</td>
-                        <td class="six aligned">
-                          <div class="gradient"></div>
-                        </td>
-                        <td class="two wide right aligned">Max</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div id="interaction" class="db_p_filter title">
-                  <button class="ui button">Interaction</button>
-                </div>
-                <div class="content">
-                  <table class="ui basic aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left two wide aligned">Min</td>
-                        <td class="six aligned">
-                          <div class="gradient"></div>
-                        </td>
-                        <td class="two wide right aligned">Max</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Space section-->
-            <div id="space" class="hidden">
-              <div class="ui segment">
-                <div class="content">
-                  <table class="ui basic aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left aligned">Width</td>
-                        <td class="twelve wide">
-                          <div class="ui_slider" id="sldCon_Width"></div>
-                        </td>
-                      </tr>
-                      <tr id="row_Height">
-                        <td class="left aligned">Height</td>
-                        <td class="twelve wide">
-                          <div class="ui_slider" id="sldCon_Height"></div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <table class="ui basic aligned table">
-                    <tbody>
-                      <tr>
-                        <td class="left aligned">Min/Max</td>
-                        <td class="twelve wide">
-                          <div class="ui_slider" id="sldRan_Clip"></div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="left aligned">Skew</td>
-                        <td class="twelve wide">
-                          <div class="ui_slider" id="sldCon_Skew"></div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <table class="ui basic aligned inverted table fluid">
-                    <tbody>
-                      <tr>
-                        <td class="sixteen wide">
-                          <select class="ui fluid dropdown" id="drop_Foc">
-                            <option value="">None</option>
-                            <option value="dist1">Left expo</option>
-                            <option value="dist2">Right expo</option>
-                            <option value="dist3">Entrance</option>
-                          </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="sixteen wide">
-                          <div class="ui_slider" id="sldCon_Foc"></div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <button class="ui button" id="btn_reset">Reset</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Statistics -->
-        <div class="ui statistics inverted floated bottom tiny" id="stats">
-          <div class="ui statistic">
-            <div class="value curr_cl"></div>
-            <div class="label">visits</div>
-          </div>
-          <div class="ui statistic">
-            <div class="value prod_len">120</div>
-            <div class="label">units</div>
-          </div>
-          <div class="ui statistic">
-            <div class="value">734 $</div>
-            <div class="label">AVG tickets</div>
-          </div>
-          <div class="ui statistic">
-            <div class="value">8830 $</div>
-            <div class="label">total Sales</div>
+      <!-- EXTRA sub-buttons panels -->
+      <div id="vis_settings" class="popup ui ppup">
+        <div class="content">
+          <table class="ui basic aligned table">
+            <tbody>
+              <tr>
+                <td class="left aligned">Width</td>
+                <td class="twelve wide">
+                  <div class="ui_slider" id="sldCon_Width"></div>
+                </td>
+              </tr>
+              <tr id="row_Height">
+                <td class="left aligned">Height</td>
+                <td class="twelve wide">
+                  <div class="ui_slider" id="sldCon_Height"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="ui basic aligned table">
+            <tbody>
+              <tr>
+                <td class="left aligned">Min/Max</td>
+                <td class="twelve wide">
+                  <div class="ui_slider" id="sldRan_Clip"></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="left aligned">Skew</td>
+                <td class="twelve wide">
+                  <div class="ui_slider" id="sldCon_Skew"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="ui basic aligned inverted table fluid">
+            <tbody>
+              <tr>
+                <td class="sixteen wide">
+                  <select class="ui fluid dropdown" id="drop_Foc">
+                    <option value="">None</option>
+                    <option value="dist1">Left expo</option>
+                    <option value="dist2">Right expo</option>
+                    <option value="dist3">Entrance</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="sixteen wide">
+                  <div class="ui_slider" id="sldCon_Foc"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="ui button" id="btn_reset">Reset</button>
+          <div class="ui segment secondary">
+            <div
+              id="t_chart"
+              style="min-width: 100%; height: 0px; margin-top: 40px; padding: 0"
+            ></div>
           </div>
         </div>
       </div>
 
-      <div class="page hidden" id="insights">
-        <div
-          class="ui floating clearable dropdown inverted basic button"
-          id="drop_Filt"
-        >
-          <i class="filter icon"></i>
-          <span class="text default">Filter</span>
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="scrolling menu">
-              <div class="item" data-value="0_0">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #3e2cb0 !important"
-                ></div>
-                Male
+      <!-- CUSTOMERS Section ---------------------------------------------------------------------------->
+      <div class="ui active block ui_content" id="customers">
+        <!-- Customers map-->
+        <div class="ui styled accordion circular">
+          <div id="gender" class="db_filter title aligned active">
+            <button class="ui button">Gender</button>
+            <i class="dropdown icon f-right"></i>
+          </div>
+          <div class="content active">
+            <table class="ui basic right aligned table">
+              <tbody>
+                <tr>
+                  <td class="left aligned">Male</td>
+                  <td>
+                    <div class="ui label layers_lbl_0_0">%</div>
+                    <i class="stop icon" style="color: #3e2cb0"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Female</td>
+                  <td>
+                    <div class="ui label layers_lbl_0_1">%</div>
+                    <i class="stop icon" style="color: #e64366"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="age" class="db_filter title">
+            <button class="ui button">Age</button>
+            <i class="dropdown icon f-right"></i>
+          </div>
+          <div class="content">
+            <table class="ui basic right aligned table">
+              <tbody>
+                <tr>
+                  <td class="left aligned">Kids</td>
+                  <td>
+                    <div class="ui label layers_lbl_1_0">%</div>
+                    <i class="stop icon" style="color: #d1e028"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Young</td>
+                  <td>
+                    <div class="ui label layers_lbl_1_1">%</div>
+                    <i class="stop icon" style="color: #d8ac3d"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Adult</td>
+                  <td>
+                    <div class="ui label layers_lbl_1_2">%</div>
+                    <i class="stop icon" style="color: #df7751"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Elder</td>
+                  <td>
+                    <div class="ui label layers_lbl_1_3">%</div>
+                    <i class="stop icon" style="color: #e64366"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="group" class="db_filter title">
+            <button class="ui button">Ethnicity</button>
+            <i class="dropdown icon f-right"></i>
+          </div>
+          <div class="content">
+            <table class="ui basic right aligned table">
+              <tbody>
+                <tr>
+                  <td class="left aligned">Caucasian</td>
+                  <td>
+                    <div class="ui label layers_lbl_2_0">%</div>
+                    <i class="stop icon" style="color: #3e2cb0"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Indian</td>
+                  <td>
+                    <div class="ui label layers_lbl_2_1">%</div>
+                    <i class="stop icon" style="color: #d1e028"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Middle Eastern</td>
+                  <td>
+                    <div class="ui label layers_lbl_2_2">%</div>
+                    <i class="stop icon" style="color: #e64366"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Afro American</td>
+                  <td>
+                    <div class="ui label layers_lbl_2_3">%</div>
+                    <i class="stop icon" style="color: #a243e6"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Asian</td>
+                  <td>
+                    <div class="ui label layers_lbl_2_4">%</div>
+                    <i class="stop icon" style="color: #e0283e"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left aligned">Other</td>
+                  <td>
+                    <div class="ui label layers_lbl_2_5">%</div>
+                    <i class="stop icon" style="color: #2cb0a8"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Customers stats-->
+        <div class="ui statistics stats inverted floated bottom no_pt">
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">21,0% (+0,79%)</div>
+            <div class="value l_a">22,4%</div>
+            <div class="label lbl">conversion</div>
+          </div>
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">2 (=)</div>
+            <div class="value l_a">2</div>
+            <div class="label lbl">units</div>
+          </div>
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">49.8$ (+14.10)</div>
+            <div class="value l_a">53.5$</div>
+            <div class="label lbl">AVG ticket</div>
+          </div>
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">7004$ (+8.13%)</div>
+            <div class="value l_a">8830$</div>
+            <div class="label lbl">sales</div>
+          </div>
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">18 (+10%)</div>
+            <div class="value l_a curr_cl"></div>
+            <div class="label lbl">visits</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS Section ---------------------------------------------------------------------------->
+      <div class="ui ui_content hidden" id="products">
+        <!-- Products map-->
+        <div class="ui content">
+          <div class="ui styled accordion">
+            <div id="gaze" class="db_p_filter title active">
+              <button class="ui button">Gaze</button>
+            </div>
+            <div class="content active">
+              <table class="ui basic aligned table">
+                <tbody>
+                  <tr>
+                    <td class="left two wide aligned">Min</td>
+                    <td class="six aligned">
+                      <div class="gradient"></div>
+                    </td>
+                    <td class="two wide right aligned">Max</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="object" class="db_p_filter title">
+              <button class="ui button">Focus</button>
+            </div>
+            <div class="content">
+              <table class="ui basic aligned table">
+                <tbody>
+                  <tr>
+                    <td class="left two wide aligned">Min</td>
+                    <td class="six aligned">
+                      <div class="gradient"></div>
+                    </td>
+                    <td class="two wide right aligned">Max</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="interaction" class="db_p_filter title">
+              <button class="ui button">Interaction</button>
+            </div>
+            <div class="content">
+              <table class="ui basic aligned table">
+                <tbody>
+                  <tr>
+                    <td class="left two wide aligned">Min</td>
+                    <td class="six aligned">
+                      <div class="gradient"></div>
+                    </td>
+                    <td class="two wide right aligned">Max</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products stats-->
+        <div class="ui statistics stats inverted floated bottom no_pt">
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">48,6 (+46%)</div>
+            <div class="value l_a">64,3%</div>
+            <div class="label lbl">gaze</div>
+          </div>
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">30,1% (+1,2%)</div>
+            <div class="value l_a">32,4%</div>
+            <div class="label lbl">focus</div>
+          </div>
+          <div class="ui statistic r_spaced">
+            <div class="label sublbl">2 (=)</div>
+            <div class="value l_a">35,4%</div>
+            <div class="label lbl">interaction</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORT Section ---------------------------------------------------------------------------->
+      <div class="hidden" id="report">
+        <!-- FIRST PAGE -->
+        <div class="ui fluid content" id="report_1">
+          <!-- Filter -->
+          <div
+            class="ui floating clearable dropdown inverted basic button"
+            id="rep1_filt"
+          >
+            <i class="filter icon"></i>
+            <span class="text default">Filter</span>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="scrolling menu">
+                <div class="item" data-value="0_0">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #3e2cb0 !important"
+                  ></div>
+                  Male
+                </div>
+                <div class="item" data-value="0_1">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #e64366 !important"
+                  ></div>
+                  Female
+                </div>
+                <div class="divider"></div>
+                <div class="item" data-value="1_0">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #d1e028 !important"
+                  ></div>
+                  Kids
+                </div>
+                <div class="item" data-value="1_1">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #d8ac3d !important"
+                  ></div>
+                  Young
+                </div>
+                <div class="item" data-value="1_2">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #df7751 !important"
+                  ></div>
+                  Adult
+                </div>
+                <div class="item" data-value="1_3">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #e64366 !important"
+                  ></div>
+                  Elder
+                </div>
+                <div class="divider"></div>
+                <div class="item" data-value="2_0">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #3e2cb0 !important"
+                  ></div>
+                  Caucasian
+                </div>
+                <div class="item" data-value="2_1">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #d1e028 !important"
+                  ></div>
+                  Indian
+                </div>
+                <div class="item" data-value="2_2">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #e64366 !important"
+                  ></div>
+                  Middle Eastern
+                </div>
+                <div class="item" data-value="2_3">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #a243e6 !important"
+                  ></div>
+                  Afro American
+                </div>
+                <div class="item" data-value="2_4">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #e0283e !important"
+                  ></div>
+                  Asian
+                </div>
+                <div class="item" data-value="2_5">
+                  <div
+                    class="ui empty circular label"
+                    style="background-color: #2cb0a8 !important"
+                  ></div>
+                  Other
+                </div>
               </div>
-              <div class="item" data-value="0_1">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #e64366 !important"
-                ></div>
-                Female
+            </div>
+          </div>
+          <div class="ui grid fluid slide sixteen wide middle aligned">
+            <div class="ui column one wide"></div>
+            <div class="ui column seven wide">
+              <canvas id="pie_Gen"></canvas>
+            </div>
+            <!-- Charts -->
+            <div class="ui column three wide">
+              <div class="row"><canvas class="" id="pie_Age"></canvas></div>
+              <div class="row">
+                <canvas class="" id="pie_Grp"></canvas>
               </div>
-              <div class="divider"></div>
-              <div class="item" data-value="1_0">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #d1e028 !important"
-                ></div>
-                Kids
-              </div>
-              <div class="item" data-value="1_1">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #d8ac3d !important"
-                ></div>
-                Young
-              </div>
-              <div class="item" data-value="1_2">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #df7751 !important"
-                ></div>
-                Adult
-              </div>
-              <div class="item" data-value="1_3">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #e64366 !important"
-                ></div>
-                Elder
-              </div>
-              <div class="divider"></div>
-              <div class="item" data-value="2_0">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #3e2cb0 !important"
-                ></div>
-                Caucasian
-              </div>
-              <div class="item" data-value="2_1">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #d1e028 !important"
-                ></div>
-                Indian
-              </div>
-              <div class="item" data-value="2_2">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #e64366 !important"
-                ></div>
-                Middle Eastern
-              </div>
-              <div class="item" data-value="2_3">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #a243e6 !important"
-                ></div>
-                Afro American
-              </div>
-              <div class="item" data-value="2_4">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #e0283e !important"
-                ></div>
-                Asian
-              </div>
-              <div class="item" data-value="2_5">
-                <div
-                  class="ui empty circular label"
-                  style="background-color: #2cb0a8 !important"
-                ></div>
-                Other
+              <div class="row"></div>
+            </div>
+            <!-- Stats -->
+            <div class="ui column four wide middle aligned">
+              <div class="ui horizontal statistics inverted">
+                <div class="statistic">
+                  <div class="value curr_cl"></div>
+                  <div class="label lbl">
+                    23 (-6%)
+                    <br />
+                    visits
+                  </div>
+                </div>
+                <div class="statistic">
+                  <div class="value">445</div>
+                  <div class="label lbl">
+                    520 (-23%)
+                    <br />
+                    interaction
+                  </div>
+                </div>
+                <div class="statistic">
+                  <div class="value">8830 $</div>
+                  <div class="label lbl">
+                    6502 (-31%)
+                    <br />
+                    Sales
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class=""></div>
-        <div class="ui grid fluid sixteen wide middle aligned">
-          <div class="ui column one wide"></div>
-          <div class="ui column seven wide">
-            <canvas id="pie_Gen"></canvas>
+
+        <!-- SECOND PAGE -->
+        <div class="hidden" id="report_2">
+          <!-- Filter -->
+          <div
+            class="ui floating top clearable dropdown inverted basic button"
+            id="rep2_filt"
+          >
+            <i class="filter icon"></i>
+            <span class="text">Gender</span>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="scrolling menu">
+                <div
+                  class="item selected refresh_chart"
+                  onclick="activateLayer('gender')"
+                >
+                  Gender
+                </div>
+                <div class="item refresh_chart" onclick="activateLayer('age')">
+                  Age
+                </div>
+                <div
+                  class="item refresh_chart"
+                  onclick="activateLayer('group')"
+                >
+                  Group
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="ui column three wide">
-            <div class="row"><canvas class="" id="pie_Age"></canvas></div>
+          <div class="ui grid sixteen fluid wide centered middle aligned slide">
             <div class="row">
-              <canvas class="" id="pie_Grp"></canvas>
+              <div class="ui column twelve wide">
+                <div id="r_chart" style="min-width: 100%"></div>
+              </div>
             </div>
-            <div class="row"></div>
-          </div>
-
-          <div class="ui column four wide middle aligned">
-            <div class="ui horizontal statistics inverted">
-              <div class="statistic">
-                <div class="value curr_cl"></div>
-                <div class="label">Total Visits</div>
-              </div>
-              <div class="statistic">
-                <div class="value">2309 $</div>
-                <div class="label">Total Sales</div>
-              </div>
-              <div class="statistic">
-                <div class="value">445</div>
-                <div class="label">Average Ticket</div>
-              </div>
-              <div class="statistic">
-                <div class="value">14.56%</div>
-                <div class="label">Occupancy rate</div>
-              </div>
+            <div class="row">
+              <div class="ui secondary item inverted" id="rep2_legend"></div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Flow charts -->
-      <div class="ui grid sixteen wide hidden" id="flow">
-        <div class="ui column twelve wide" id="dy_container">
-          <div id="chart" style="min-width: 100%"></div>
+        <!-- THIRD PAGE -->
+        <div class="hidden" id="report_3">
+          <div
+            class="ui floating top clearable dropdown inverted basic button"
+            id="rep2_filt"
+          >
+            <i class="filter icon"></i>
+            <span class="text">NIKE Air Jordan</span>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="scrolling menu">
+                <div class="item" onclick="changeProd('0')">
+                  NIKE Air Jordan
+                </div>
+                <div class="item" onclick="changeProd('1')">NIKE Air Dior</div>
+                <div class="item" onclick="changeProd('2')">
+                  NIKE Air Jordan
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui grid five column fluid centered slide middle aligned">
+            <div class="stretched row">
+              <div class="column"></div>
+              <div class="column">
+                <div class="ui card fluid">
+                  <div class="image">
+                    <img
+                      id="card_img"
+                      src="https://static.nike.com/a/images/t_default/2016a636-2953-41b4-b496-55263f2b26bc/air-jordan-1-mid-zapatillas-6L9QW1.png"
+                    />
+                  </div>
+                  <div class="content">
+                    <p class="header" id="p_name">Nike Air Jordan</p>
+                    <div class="meta">
+                      <span class="date" id="p_days"
+                        >On display for 35 days</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column" id="img_lbl">
+                <div class="ui inverted statistic">
+                  <div class="value l_a" id="p_price">5.543 $</div>
+                  <br />
+                  <br />
+
+                  <div class="label lbl">Gaze</div>
+                  <div class="ui segment bar inverted"></div>
+                  <div class="ui segment bar line_bar" id="lineb_1"></div>
+                  <br />
+                  <div class="label lbl">Focus</div>
+                  <div class="ui segment bar inverted"></div>
+                  <div class="ui segment bar line_bar" id="lineb_2"></div>
+                  <br />
+
+                  <div class="label lbl">Interaction</div>
+                  <div class="ui segment bar inverted"></div>
+                  <div class="ui segment bar line_bar" id="lineb_3"></div>
+                  <br />
+                </div>
+              </div>
+              <div class="column"></div>
+            </div>
+          </div>
         </div>
-        <div class="ui column three wide middle aligned">
-          <div class="ui horizontal statistics inverted">
-            <div class="statistic">
-              <div class="value curr_cl"></div>
-              <div class="label">Customers</div>
-            </div>
-            <div class="statistic">
-              <div class="value">50</div>
-              <div class="label">Daily Visits</div>
-            </div>
-            <div class="statistic">
-              <div class="value">445</div>
-              <div class="label">Weekly Visits</div>
-            </div>
-            <div class="statistic">
-              <div class="value">1200</div>
-              <div class="label">Monthly Visits</div>
-            </div>
+
+        <!-- SubPage menu -->
+        <div class="ui grid fluid centered">
+          <div class="ui secondary menu inverted floated bottom">
+            <a class="item active" onclick="changePage('report_1')"> Stats </a>
+            <a
+              class="item"
+              id="r_btn_flow"
+              onclick="changePage('report_2'); showHandles()"
+            >
+              Flow
+            </a>
+            <a class="item" onclick="changePage('report_3')"> Stock </a>
           </div>
         </div>
       </div>
@@ -540,27 +683,11 @@
       <div class="ui horizontal list floated bottom" id="logo">
         <img
           class="floated bottom"
-          src="https://raw.githubusercontent.com/neriiacopo/NEX_UI/main/public/Noumena_logo.png"
-          alt="NOUMENA"
+          src="./public/nex_brand_logo.png"
+          alt="NEX"
           height="100%"
-          width="100px"
+          width="150px"
         />
-      </div>
-
-      <!-- Cameras Toggle -->
-      <div class="ui_buttons">
-        <button
-          class="ui big circular icon button active secondary z2"
-          id="tgl_camera"
-        >
-          <i class="cube icon"></i>
-        </button>
-        <button class="ui big circular icon button" id="tgl_focus">
-          <i class="user icon"></i>
-        </button>
-        <button class="ui big circular icon button" id="tgl_calendar">
-          <i class="calendar alternate outline icon"></i>
-        </button>
       </div>
     </div>
 
@@ -569,11 +696,14 @@
 
     <script>
       $(".ui.accordion").accordion();
-      $(".ui.dropdown").dropdown();
+      $(".ui.dropdown").dropdown({});
+
+      $(".ui.menu a.item").on("click", function () {
+        $(this).addClass("active").siblings().removeClass("active");
+      });
 
       // Settings for cameras
       $("#tgl_camera").click(function () {
-        $(this).toggleClass("active");
         $(this).children(".icon").toggleClass("cube stop");
       });
 
@@ -588,15 +718,33 @@
         blurIn();
       });
 
-      // Settings for customers/prod
-      $("#tgl_focus").click(function () {
-        $(this).children(".icon").toggleClass("user shopping bag");
-        $("#accordion_grid").toggleClass("show not_show");
-        $("#accordion_prod").toggleClass("show not_show");
-        $("#row_Height").toggleClass("disabled");
+      // Settings for time properties
+      $("#tgl_time").click(function () {
+        $("#time_settings").toggleClass("show not_show");
       });
 
-      $("#tgl_calendar").calendar({ type: "date" });
+      $("#tgl_calendar").calendar({
+        type: "date",
+        popupOptions: {
+          position: "bottom right",
+          lastResort: "bottom right",
+          prefer: "opposite",
+          hideOnScroll: false,
+          exclusive: true,
+        },
+      });
+
+      $("#tgl_vis").popup({
+        popup: "#vis_settings",
+        exclusive: true,
+        hoverable: false,
+        position: "bottom right",
+        lastResort: "bottom right",
+        lastResort: "bottom right",
+        on: "click",
+      });
+
+      changeProd("0");
     </script>
     <!-- Threee -->
     <div id="canvas" class="z3"></div>

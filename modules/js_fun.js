@@ -71,7 +71,6 @@ function getChild(e) {
 }
 
 function tglActive(elem) {
-  console.log(elem.classList);
   if (!elem.classList.contains("active")) {
     elem.classList.add("active");
   }
@@ -122,4 +121,86 @@ function showTab(id) {
     blur.classList.remove("blur_out");
     blur.classList.add("blur_in");
   }
+}
+
+function changePage(id) {
+  var reports_ids = ["report_1", "report_2", "report_3"];
+
+  reports_ids.forEach(function (input) {
+    let report = document.getElementById(input);
+    report.classList.add("hidden");
+  });
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function activateLayer(id) {
+  let layers = document.getElementsByClassName("db_filter");
+  Array.from(layers).forEach(function (input) {
+    input.classList.remove("active");
+  });
+
+  let layer = document.getElementById(id);
+  layer.classList.add("active");
+}
+
+function changeProd(id) {
+  var card = {
+    img: "card_img",
+    name: "p_name",
+    days: "p_days",
+    price: "p_price",
+    gaze: "lineb_1",
+    focus: "lineb_2",
+    interaction: "lineb_3",
+  };
+
+  var products = [
+    {
+      name: "Nike Air Jordan",
+      days: 35,
+      price: 9.312,
+      url: "https://static.nike.com/a/images/t_default/2016a636-2953-41b4-b496-55263f2b26bc/air-jordan-1-mid-zapatillas-6L9QW1.png",
+      gaze: 40,
+      focus: 34,
+      interaction: 84,
+    },
+    {
+      name: "Nike Air Dior",
+      days: 12,
+      price: 3.567,
+      url: "https://sneakerstrendz.com/wp-content/uploads/2020/06/air-jordan-1-x-dior.jpg",
+      gaze: 22,
+      focus: 56,
+      interaction: 34,
+    },
+    {
+      name: "Nike Air Off White",
+      price: 5.677,
+      days: 42,
+      url: "https://myreact.ru/wp-content/uploads/2020/08/img01-30.jpg",
+      gaze: 55,
+      focus: 43,
+      interaction: 67,
+    },
+  ];
+
+  let prod = products[id];
+  document.getElementById(card["img"]).src = prod["url"];
+  document.getElementById(card["name"]).innerHTML = prod["name"];
+  document.getElementById(card["price"]).innerHTML = String(
+    prod["price"]
+  ).concat(" $");
+  document.getElementById(card["days"]).innerHTML =
+    ["On display for "] + String(prod["days"]) + " days";
+  document.getElementById(card["gaze"]).style.width = String(
+    prod["gaze"]
+  ).concat("%");
+  document.getElementById(card["focus"]).style.width = String(
+    prod["focus"]
+  ).concat("%");
+  document.getElementById(card["interaction"]).style.width = String(
+    prod["interaction"]
+  ).concat("%");
+
+  console.log(document.getElementById(card["img"]));
 }

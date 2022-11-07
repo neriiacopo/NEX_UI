@@ -52,12 +52,18 @@ body {
   transform: translateY(15px) !important;
 }
 
-#stats {
+.stats {
   margin-bottom: 0;
   bottom: 0;
   position: absolute;
   float: bottom;
   vertical-align: text-bottom;
+  width: 100%;
+}
+
+.hor_cent {
+  text-align: center;
+  transform: translateX(330%) !important;
 }
 
 #canvas {
@@ -79,10 +85,29 @@ body {
   margin-bottom: 10px !important;
 }
 
+.slide {
+  height: 80vh;
+  padding-bottom: 30px !important;
+}
+
+#r_chart {
+  pointer-events: none;
+}
+
 .page {
   position: absolute;
   width: 100%;
-  height: 30vh;
+  /* height: 80vh; */
+}
+
+.bar {
+  height: 5px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.line_bar {
+  transform: translateY(-100%);
 }
 
 #ui_wrapper {
@@ -98,7 +123,7 @@ body {
 }
 
 .ui_content {
-  width: 25%;
+  width: 20%;
   margin-top: 0;
   margin-left: 0;
 }
@@ -156,7 +181,15 @@ body {
   border-radius: 5px;
 }
 
-#chart {
+#t_chart {
+  border: solid 1px white;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#r_chart {
   border: solid 1px white;
   border-radius: 5px;
   width: 100%;
@@ -226,7 +259,7 @@ path {
   margin: 30px;
 }
 
-.calendar.popup::before {
+.popup::before {
   display: none;
 }
 
@@ -271,10 +304,12 @@ path {
 .z2 {
   /* dygraph */
   z-index: -99;
+  position: relative;
+  pointer-events: auto;
 }
 .z1 {
   /* blur modal */
-  z-index: -9;
+  z-index: -9 !important;
 }
 
 .no_pt {
@@ -314,4 +349,40 @@ path {
   background: linear-gradient(to right, #313131, #39ff14) !important;
   height: 11px;
   width: 100%;
+}
+
+.ppup {
+  min-width: 300px !important;
+  float: right;
+}
+
+.t_chart {
+  height: 100px !important;
+  min-height: 100px;
+}
+
+.half_w {
+  width: 50%;
+}
+
+.lbl {
+  text-align: left !important;
+}
+
+.sublbl {
+  font-size: 0.75em !important;
+  text-align: left !important;
+  margin-bottom: -0.5em;
+}
+
+.r_spaced {
+  margin-right: 2em !important;
+}
+
+.l_a {
+  text-align: left !important;
+}
+
+.w {
+  color: white;
 }

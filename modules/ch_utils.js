@@ -1,7 +1,7 @@
 export async function drawPies(grid_vals, keys, colors, subdiv) {
   let detections = await grid_vals;
 
-  let filter = $("#drop_Filt").dropdown("get value"); // Filter focus key
+  let filter = $("#rep1_filt").dropdown("get value"); // Filter focus key
   const ids = ["pie_Gen", "pie_Age", "pie_Grp"];
   const titles = ["gender", "age", "group"];
   const labels = [
@@ -69,6 +69,12 @@ export async function drawPies(grid_vals, keys, colors, subdiv) {
         // Set font based on .ui class
         var fontUi = getComputedStyle(document.querySelector(".ui"));
         ctx.font = parseInt(fontUi.fontSize) * 0.8 + "px " + fontUi.fontFamily; // Fixed
+
+        if (ind == 0) {
+          ctx.font =
+            parseInt(fontUi.fontSize) * 1.5 + "px " + fontUi.fontFamily; // Fixed
+        }
+
         ctx.textBaseline = "middle";
 
         // From abs to percentage
@@ -83,7 +89,7 @@ export async function drawPies(grid_vals, keys, colors, subdiv) {
         for (let i = 0; i < values.length; i++) {
           // var paddPerc = 0.5;
           // var hStep = (height / values.length) * paddPerc; // Adaptive
-          var hStep = 30; // Fixed
+          var hStep = 25; // Fixed
 
           var text = lab[i] + " " + Math.round((values[i] * 100) / sum) + "%", // Calculate percentage
             textX = Math.round((width - ctx.measureText(text).width) / 2),

@@ -19,7 +19,8 @@ import { Clock, NoToneMapping } from "three";
 let scene, renderer, camera, controls, ambientlight;
 let bars, boxes, aspect;
 var time_range, filter_grid, filter_prod;
-var chart = document.querySelector("#chart");
+var tChart = document.querySelector("#t_chart");
+var rChart = document.querySelector("#r_chart");
 const dummy = new THREE.Object3D(); // Dummmy geom for instance mesh
 const dammy = new THREE.Object3D(); // Dummmy geom for instance mesh
 const keys = ["gender", "age", "group"]; // Data layers
@@ -55,7 +56,11 @@ let sldClip = document.getElementById("sldRan_Clip");
 let sldSkew = document.getElementById("sldCon_Skew");
 let sldFoc = document.getElementById("sldCon_Foc");
 
-let tglGridProd = document.getElementById("tgl_focus");
+let idsGridProd = ["customers", "products"];
+let timeBtn = document.getElementById("tgl_vis");
+let reportBtn = document.getElementById("r_btn_flow");
+timeBtn.addEventListener("click", drawTimeChart);
+reportBtn.addEventListener("click", drawReportChart);
 
 const amount_g = grid_arr.length * 6 + 1; // Max bars instances as the max grid cells
 const amount_p = prod_arr.length;
@@ -150,7 +155,9 @@ function updateGrid() {
   let fac_Sk = sldSkew.noUiSlider.get(); // Skewing factor
   let key_foc = $("#drop_Foc").dropdown("get value"); // Filter focus key
   let filt_foc = sldFoc.noUiSlider.get(); // Filter focus distance
-  let toggle = tglGridProd.firstElementChild.classList.contains("user");
+  let toggle = document
+    .getElementById(idsGridProd[0])
+    .classList.contains("block");
 
   let labels = [
     ["layers_lbl_0_0", "layers_lbl_0_1"],
@@ -198,9 +205,12 @@ function updateGrid() {
 
     // Update labels
     let lbl_id = labels[f][i];
-    let lbl = document.getElementById(lbl_id);
+    let lbl = document.getElementsByClassName(lbl_id);
     let perc = Math.round((vals_filt.length * 100) / detections.length);
-    lbl.textContent = perc + "%";
+
+    Array.from(lbl).forEach(function (input) {
+      input.textContent = perc + "%";
+    });
 
     // Count occurencies per id
     let counts = [...Array(grid_arr.length)].map((x) => 0);
@@ -295,8 +305,9 @@ function updateProd() {
   let fac_Sk = sldSkew.noUiSlider.get(); // Skewing factor
   let key_foc = $("#drop_Foc").dropdown("get value"); // Filter focus key
   let filt_foc = sldFoc.noUiSlider.get(); // Filter focus distance
-  let toggle = tglGridProd.firstElementChild.classList.contains("shopping");
-
+  let toggle = document
+    .getElementById(idsGridProd[1])
+    .classList.contains("block");
   const v = 0.1 / 2;
 
   let j = 1;
@@ -394,7 +405,9 @@ function updateProd() {
 }
 
 function render() {
-  let bool = tglGridProd.firstElementChild.classList.contains("user");
+  let bool = document
+    .getElementById(idsGridProd[0])
+    .classList.contains("block");
   updateGrid();
   updateProd();
   controls.update();
@@ -452,7 +465,7 @@ document.querySelector("#tgl_camera").addEventListener("click", tglCamera);
 
 await drawPies(grid_vals, keys, colors, subdiv);
 
-let d = $("#drop_Filt").dropdown({
+let d = $("#rep1_filt").dropdown({
   // action: "combo",
   clearable: true,
   onChange: function (value, text, $selectedItem) {
@@ -467,15 +480,11 @@ function roundToTimeUnit(unix, step) {
   return Math.round(((unix * 1000) / ms) * ms);
 }
 
-var container = document.getElementById("dy_container");
-
-var dy_options = {
-  title: "",
+var dy_t_options = {
   legend: "never",
-  ylabel: "Customers",
-  height: 300,
+  height: 1,
   width: "auto",
-  strokeWidth: 3,
+  strokeWidth: 0,
   fillAlpha: 0.2,
   fillGraph: true,
   rollPeriod: 60,
@@ -483,10 +492,10 @@ var dy_options = {
   showLabelsOnHighlight: false,
   rangeSelectorAlpha: 0.1,
   showRangeSelector: true,
-  rangeSelectorBackgroundStrokeColor: "rgb(128, 128, 128)",
+  rangeSelectorBackgroundStrokeColor: "black",
   rangeSelectorPlotFillColor: "black",
   rangeSelectorPlotFillGradientColor: "rgb(128, 128, 128)",
-  axisLineColor: "rgb(128, 128, 128)",
+  drawAxis: false,
   animatedZooms: false,
   drawCallback: function () {
     // this.ready(function () {
@@ -526,15 +535,56 @@ var dy_options = {
   },
 };
 
-tglGridProd.addEventListener("click", drawChart);
+var dy_r_options = {
+  title: "",
+  legend: "always",
+  ylabel: "Flow",
+  height: 300,
+  width: "auto",
+  strokeWidth: 3,
+  fillAlpha: 0.2,
+  fillGraph: true,
+  rollPeriod: 60,
+  stepPlot: true,
+  rangeSelectorAlpha: 0.1,
+  showRangeSelector: false,
+  rangeSelectorBackgroundStrokeColor: "rgb(128, 128, 128)",
+  rangeSelectorPlotFillColor: "black",
+  rangeSelectorPlotFillGradientColor: "rgb(128, 128, 128)",
+  axisLineColor: "rgb(128, 128, 128)",
+  animatedZooms: false,
+  showLabelsOnHighlight: true,
+  labelsSeparateLines: false,
+  labelsDiv: document.getElementById("rep2_legend"),
+};
 
-async function drawChart() {
-  let toggle = tglGridProd.firstElementChild.classList.contains("user");
+let btn = document.getElementsByClassName("refresh_chart");
+Array.from(btn).forEach(function (input) {
+  input.addEventListener("click", drawReportChart);
+});
+
+async function drawReportChart() {
   let detections = grid_vals;
 
   // Update Chart on UI selector
   setTimeout(async function () {
     let filter_grid = document.querySelector(".db_filter.active").id;
+
+    let labels = ["Date", "Total"];
+    if (filter_grid == "gender") {
+      labels.push("Male", "Female");
+    } else if (filter_grid == "age") {
+      labels.push("Kid", "Young", "Adult", "Elder");
+    } else if (filter_grid == "group") {
+      labels.push(
+        "Caucasian",
+        "Indian",
+        "Middle Eastern",
+        "Afroamerican",
+        "Asian",
+        "Other"
+      );
+    }
     // Selected key
     let f = keys.indexOf(filter_grid);
     let key = filter_grid;
@@ -575,63 +625,27 @@ async function drawChart() {
       let item = db[i];
       db[i] = item.concat(ch_counts[i]);
     }
-    if (toggle == true) {
-      // Loop for values of filters
-      for (let i = 0; i < subdiv[f]; i++) {
-        let vals_filt = [];
-        let timeStamp_filt = [];
-
-        // Prepare filtered values
-        for (const detection of detections) {
-          if (detection[key] == i) {
-            vals_filt.push(detection.id);
-            let time = detection.timestamp;
-            let time_round = roundToTimeUnit(time, time_step);
-            timeStamp_filt.push(time_round);
-          }
-        }
-
-        // Calculate counts per timestamp
-        let offset = 0.05 * i;
-        let ch_counts = [...Array(ch_lim)].map((x) => offset);
-        for (const num of timeStamp_filt) {
-          let id = timeStamp_unique.indexOf(num);
-          ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
-        }
-
-        for (let i = 0; i < ch_lim; i++) {
-          let item = db[i];
-          db[i] = item.concat(ch_counts[i]);
-        }
-
-        if (i == 0) {
-          try {
-            chart.destroy();
-          } catch (e) {}
-        }
-      }
-    } else {
-      // Loop for values of filters
+    // Loop for values of filters
+    for (let i = 0; i < subdiv[f]; i++) {
       let vals_filt = [];
-      let vals_filt_m = [];
       let timeStamp_filt = [];
 
       // Prepare filtered values
-      for (const x of cash_flow) {
-        let time = x.timestamp;
-        let time_round = roundToTimeUnit(time, time_step);
-        timeStamp_filt.push(time_round);
-        vals_filt.push(x.cash);
-        vals_filt_m.push(x.cash_m);
+      for (const detection of detections) {
+        if (detection[key] == i) {
+          vals_filt.push(detection.id);
+          let time = detection.timestamp;
+          let time_round = roundToTimeUnit(time, time_step);
+          timeStamp_filt.push(time_round);
+        }
       }
 
       // Calculate counts per timestamp
-      let offset = null;
+      let offset = 0.05 * i;
       let ch_counts = [...Array(ch_lim)].map((x) => offset);
       for (const num of timeStamp_filt) {
         let id = timeStamp_unique.indexOf(num);
-        let id2 = timeStamp_filt.indexOf(num);
-        ch_counts[id] = vals_filt[id2]; // Count occurrencies per timestamp
+        ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
       }
 
       for (let i = 0; i < ch_lim; i++) {
@@ -639,36 +653,93 @@ async function drawChart() {
         db[i] = item.concat(ch_counts[i]);
       }
 
-      ch_counts = [...Array(ch_lim)].map((x) => offset);
-      for (const num of timeStamp_filt) {
-        let id = timeStamp_unique.indexOf(num);
-        let id2 = timeStamp_filt.indexOf(num);
-        ch_counts[id] = vals_filt_m[id2]; // Count occurrencies per timestamp
+      if (i == 0) {
+        try {
+          chart.destroy();
+        } catch (e) {}
       }
-
-      for (let i = 0; i < ch_lim; i++) {
-        let item = db[i];
-        db[i] = item.concat(ch_counts[i]);
-      }
-
-      try {
-        chart.destroy();
-      } catch (e) {}
-      colors_sel = "#39ff14";
     }
 
-    await new Dygraph(chart, db, dy_options).updateOptions({
+    await new Dygraph(rChart, db, dy_r_options).updateOptions({
       colors: ["#d3d3d3"].concat(colors_sel),
-      labels: ["Date", "d1", "d2", "d3", "d4", "d5", "d6", "d7"],
+      labels: labels,
     });
   }, 0);
 }
 
-document.querySelector("#chartRef").addEventListener("click", drawChart);
+async function drawTimeChart() {
+  let detections = grid_vals;
+  // Update Chart on UI selector
+  setTimeout(async function () {
+    let filter = document.querySelector(".db_filter.active").id;
+    // Selected key
+    let f = keys.indexOf(filter);
+    let key = filter;
+    let colors_sel = colors[key]; // Prepare Color gradients
+
+    let time_step = 30;
+    let timeStamp = []; // Prepare db with indexes to store values
+    for (const detection of detections) {
+      let time = detection.timestamp;
+      let time_round = roundToTimeUnit(time, time_step);
+      timeStamp.push(time_round);
+    }
+
+    let timeStamp_unique = Array.from(new Set(timeStamp));
+    let ch_lim = timeStamp_unique.length; // Upper X limit of chart (timestamp of last detection
+    let db = []; // Prepare db for chart with timestamp column
+    for (let i = 0; i < ch_lim; i++) {
+      db.push([new Date(timeStamp_unique[i])]);
+    }
+
+    // Loop for values of filters
+    for (let i = 0; i < subdiv[f]; i++) {
+      let vals_filt = [];
+      let timeStamp_filt = [];
+
+      // Prepare filtered values
+      for (const detection of detections) {
+        if (detection[key] == i) {
+          vals_filt.push(detection.id);
+          let time = detection.timestamp;
+          let time_round = roundToTimeUnit(time, time_step);
+          timeStamp_filt.push(time_round);
+        }
+      }
+
+      // Calculate counts per timestamp
+      let offset = 0.05 * i;
+      let ch_counts = [...Array(ch_lim)].map((x) => offset);
+      for (const num of timeStamp_filt) {
+        let id = timeStamp_unique.indexOf(num);
+        ch_counts[id] = ch_counts[id] + 1; // Count occurrencies per timestamp
+      }
+
+      for (let i = 0; i < ch_lim; i++) {
+        let item = db[i];
+        db[i] = item.concat(ch_counts[i]);
+      }
+
+      if (i == 0) {
+        try {
+          tChart.destroy();
+        } catch (e) {}
+      }
+    }
+
+    await new Dygraph(tChart, db, dy_t_options).updateOptions({
+      colors: colors_sel,
+      labels: ["Date", "d1", "d2", "d3", "d4", "d5", "d6"],
+    });
+  }, 0);
+}
+
+// document.querySelector("#chartRef").addEventListener("click", drawChart);
 
 // ---------------------------------------------------------------------------------------------- INIT
 init();
 makeBaseGrid(scene, grid_res);
-drawChart();
+drawTimeChart();
+drawReportChart();
 drawPies(grid_vals, keys, colors, subdiv);
 animate();
